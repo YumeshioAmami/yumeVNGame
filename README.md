@@ -1,6 +1,10 @@
 # yumeVNGame
 
+[![CI](https://github.com/YumeshioAmami/yumeVNGame/actions/workflows/ci.yml/badge.svg)](https://github.com/YumeshioAmami/yumeVNGame/actions/workflows/ci.yml)
+
 > An open-source, AI-native visual novel runtime. Stories are compiled as complete narrative packages — not improvised chat — then rendered with backgrounds, sprites, CG, branching, saves, and a memory gallery.
+
+Repository: <https://github.com/YumeshioAmami/yumeVNGame>
 
 ![Home](docs/screenshots/home.jpg)
 
@@ -146,6 +150,7 @@ python scripts/build_text_dataset.py
 ```
 
 The dataset deliberately does **not** package game binaries or full commercial scripts. See `datasets/text_vn/README.md`.
+Attribution and content-license notes are in `datasets/text_vn/NOTICE.md`.
 
 ## Architecture
 
