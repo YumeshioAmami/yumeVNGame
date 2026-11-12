@@ -1,0 +1,33 @@
+{
+  "name": "yumevngame",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "AI-native visual novel runtime with persistent worlds, branching stories, and a modern glass UI.",
+  "scripts": {
+    "dev": "concurrently -k -n API,WEB -c cyan,magenta \"npm:dev:api\" \"npm:dev:web\"",
+    "dev:api": "python -m uvicorn server.main:app --reload --host 127.0.0.1 --port 8787",
+    "dev:web": "vite --config web/vite.config.ts",
+    "build": "vite build --config web/vite.config.ts",
+    "start": "python -m uvicorn server.main:app --host 127.0.0.1 --port 8787",
+    "dataset": "python scripts/build_text_dataset.py",
+    "assets": "python scripts/build_assets.py",
+    "test:api": "python scripts/smoke_test.py"
+  },
+  "dependencies": {
+    "framer-motion": "^11.15.0",
+    "lucide-react": "^0.468.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.28.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "concurrently": "^9.1.0",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.5"
+  }
+}
+

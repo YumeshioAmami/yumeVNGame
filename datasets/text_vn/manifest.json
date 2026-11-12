@@ -1,0 +1,26 @@
+{
+  "name": "yumeVNGame Text VN Dataset",
+  "version": "0.1.0",
+  "created_at": "2026-11-12T18:19:09+00:00",
+  "work_count": 17,
+  "source_policy": "Public encyclopedia plot summaries; no game binaries or full commercial scripts.",
+  "fields": [
+    "id",
+    "title_zh",
+    "title_original",
+    "developer",
+    "year",
+    "genres",
+    "themes",
+    "tags",
+    "narrative_devices",
+    "pacing_notes",
+    "character_notes",
+    "summary_zh",
+    "summary_source",
+    "source_urls",
+    "license_note",
+    "fetch_status"
+  ],
+  "note": "Use for style/structure reference and few-shot/RAG; do not redistribute full copyrighted scripts."
+}
