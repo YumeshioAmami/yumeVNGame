@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import {
   Home,
   Library,
@@ -29,9 +29,11 @@ const THEMES = [
 
 export default function Shell({ children }: { children: ReactNode }) {
   const { data, theme, setTheme } = useApp();
+  const location = useLocation();
+  const isPlayer = location.pathname.startsWith("/play");
 
   return (
-    <div className="app-shell">
+    <div className={`app-shell ${isPlayer ? "player-mode" : ""}`}>
       <div className="ambient ambient-a" />
       <div className="ambient ambient-b" />
       <div className="ambient ambient-c" />

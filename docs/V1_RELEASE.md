@@ -38,7 +38,18 @@ ALL SMOKE TESTS PASSED
 ```
 
 ```text
-OK: 2 story packages validated
+OK: all local story packages validated
+```
+
+```text
+PASS  home
+PASS  player loads
+PASS  advance
+PASS  choices visible
+PASS  choose branch
+PASS  gallery
+PASS  settings
+ALL UI SMOKE TESTS PASSED
 ```
 
 Frontend type-check and production build pass.

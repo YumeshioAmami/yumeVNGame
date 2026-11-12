@@ -213,6 +213,9 @@ python scripts/smoke_test.py
 
 # Include a real model generation test
 python scripts/smoke_test.py --generate
+
+# Local browser UI smoke test (uses installed Edge by default)
+npm run test:ui
 ```
 
 ## Current v1.0 boundaries

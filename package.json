@@ -12,7 +12,8 @@
     "start": "python -m uvicorn server.main:app --host 127.0.0.1 --port 8787",
     "dataset": "python scripts/build_text_dataset.py",
     "assets": "python scripts/build_assets.py",
-    "test:api": "python scripts/smoke_test.py"
+    "test:api": "python scripts/smoke_test.py",
+    "test:ui": "node scripts/ui_smoke.cjs"
   },
   "dependencies": {
     "framer-motion": "^11.15.0",
@@ -26,8 +27,8 @@
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.4",
     "concurrently": "^9.1.0",
+    "playwright-core": "^1.65.0",
     "typescript": "^5.7.2",
     "vite": "^6.0.5"
   }
 }
-

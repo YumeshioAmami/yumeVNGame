@@ -2064,11 +2064,14 @@ a {
   .app-shell {
     grid-template-columns: 1fr;
     padding: 10px;
+    align-items: start;
   }
   .sidebar {
     position: relative;
     top: 0;
     height: auto;
+    min-height: 0;
+    align-self: start;
     flex-direction: row;
     align-items: center;
     flex-wrap: wrap;
@@ -2079,12 +2082,25 @@ a {
     flex-direction: row;
     order: 3;
     width: 100%;
+    min-width: 0;
     overflow-x: auto;
+    gap: 2px;
   }
-  .sidebar .nav-item { white-space: nowrap; }
+  .sidebar .nav-item {
+    white-space: nowrap;
+    padding: 8px 9px;
+    gap: 6px;
+    font-size: 12px;
+  }
+  .sidebar .nav-spark { display: none; }
   .sidebar .sidebar-section,
   .sidebar-footer { display: none; }
-  .main-content { padding: 14px 4px 40px; }
+  .main-content { padding: 14px 4px 40px; min-width: 0; overflow-x: clip; }
+  .hero,
+  .hero-copy,
+  .page,
+  .page-head { min-width: 0; }
+  .hero-lead { max-width: 100%; overflow-wrap: anywhere; }
   .vn-stage {
     top: 10px;
     left: 10px;
@@ -2097,6 +2113,22 @@ a {
   .settings-grid { grid-template-columns: 1fr; }
   .field-row { grid-template-columns: 1fr; }
   .preview-layout { grid-template-columns: 1fr; }
+  .app-shell.player-mode {
+    padding: 0;
+  }
+  .app-shell.player-mode .sidebar {
+    display: none;
+  }
+  .app-shell.player-mode .main-content {
+    padding: 0;
+  }
+  .app-shell.player-mode .vn-stage {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 0;
+  }
 }
 
 @media (max-width: 640px) {
