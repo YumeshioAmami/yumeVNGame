@@ -214,6 +214,7 @@ Key design documents:
 - `docs/IMAGE_AGENT_DESIGN.md`
 - `docs/TEXT_MODEL_TEST_2026-11-13.md`
 - `docs/TEXT_AGENT_DESIGN.md`
+- `docs/MUSIC_AGENT_DESIGN.md`
 - `docs/SPECIAL_STORY_AGENT.md`
 - `docs/CHARACTER_CONSISTENCY.md`
 - `docs/CHARACTER_PIPELINE.md`
