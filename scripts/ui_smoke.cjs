@@ -73,6 +73,7 @@ async function waitForText(page, selector, text) {
   await waitForText(page, ".provider-panel h2", "图片与音乐 API Keys");
   const providerRows = await page.locator(".provider-row").count();
   if (providerRows < 4) throw new Error(`provider rows too few: ${providerRows}`);
+  await waitForText(page, ".image-agent-panel h2", "图像 Agent");
   console.log("PASS  settings / provider keys");
 
   await browser.close();

@@ -497,8 +497,14 @@ def get_settings() -> dict[str, Any]:
         "base_url": "https://api.deepseek.com",
         "tts_endpoint": "",
         "tts_voice": "",
-        "image_provider": "fal",
+        "image_provider": "nanogpt",
         "music_provider": "stability",
+        "image_agent_distant": "pixelwave",
+        "image_agent_scene": "prunaai:1@1",
+        "image_agent_special_cg": "seedream-v4.5",
+        "image_agent_draft": "blackforestlabs/flux-3/klein/edit-image",
+        "image_agent_character_final": "bytedance/seedream-v5.0-flash",
+        "image_agent_character_diff": "blackforestlabs/flux-3/klein/edit-image",
     }
     with _connect() as conn:
         rows = conn.execute("SELECT key, value FROM settings").fetchall()
@@ -516,6 +522,12 @@ def set_settings(values: dict[str, Any]) -> dict[str, Any]:
         "tts_voice",
         "image_provider",
         "music_provider",
+        "image_agent_distant",
+        "image_agent_scene",
+        "image_agent_special_cg",
+        "image_agent_draft",
+        "image_agent_character_final",
+        "image_agent_character_diff",
     }
     with _connect() as conn:
         for key, value in values.items():

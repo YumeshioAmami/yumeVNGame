@@ -21,7 +21,7 @@ const IMAGE_PROVIDERS = [
   {
     id: "nanogpt",
     name: "NanoGPT",
-    hint: "Qwen Image 3 / Qwen Edit Uncensored / Seedream / Pony，低门槛按量 API",
+    hint: "PixelWave / P-Image / Seedream / FLUX.3，低门槛按量 API",
     keyUrl: "https://nano-gpt.com/api",
   },
   {
@@ -73,10 +73,29 @@ export default function Settings() {
   const [baseUrl, setBaseUrl] = useState(data.settings.base_url);
   const [ttsEndpoint, setTtsEndpoint] = useState(data.settings.tts_endpoint);
   const [ttsVoice, setTtsVoice] = useState(data.settings.tts_voice);
-  const [imageProvider, setImageProvider] = useState(data.settings.image_provider || "fal");
+  const [imageProvider, setImageProvider] = useState(data.settings.image_provider || "nanogpt");
   const [musicProvider, setMusicProvider] = useState(data.settings.music_provider || "stability");
+  const [agentDistant, setAgentDistant] = useState(
+    data.settings.image_agent_distant || "pixelwave",
+  );
+  const [agentScene, setAgentScene] = useState(
+    data.settings.image_agent_scene || "prunaai:1@1",
+  );
+  const [agentSpecialCg, setAgentSpecialCg] = useState(
+    data.settings.image_agent_special_cg || "seedream-v4.5",
+  );
+  const [agentDraft, setAgentDraft] = useState(
+    data.settings.image_agent_draft || "blackforestlabs/flux-3/klein/edit-image",
+  );
+  const [agentCharacterFinal, setAgentCharacterFinal] = useState(
+    data.settings.image_agent_character_final || "bytedance/seedream-v5.0-flash",
+  );
+  const [agentCharacterDiff, setAgentCharacterDiff] = useState(
+    data.settings.image_agent_character_diff || "blackforestlabs/flux-3/klein/edit-image",
+  );
   const [message, setMessage] = useState<string | null>(null);
   const [providerMessage, setProviderMessage] = useState<string | null>(null);
+  const [imageAgentMessage, setImageAgentMessage] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
   async function saveKey() {
@@ -140,6 +159,24 @@ export default function Settings() {
       setProviderMessage("默认 API 通道已保存。");
     } catch (err) {
       setProviderMessage(err instanceof Error ? err.message : "保存失败");
+    }
+  }
+
+  async function saveImageAgents() {
+    setImageAgentMessage(null);
+    try {
+      await api.updateSettings({
+        image_agent_distant: agentDistant,
+        image_agent_scene: agentScene,
+        image_agent_special_cg: agentSpecialCg,
+        image_agent_draft: agentDraft,
+        image_agent_character_final: agentCharacterFinal,
+        image_agent_character_diff: agentCharacterDiff,
+      });
+      await refresh();
+      setImageAgentMessage("图像 Agent 路由已保存。");
+    } catch (err) {
+      setImageAgentMessage(err instanceof Error ? err.message : "保存失败");
     }
   }
 
@@ -350,6 +387,61 @@ export default function Settings() {
             </button>
           </div>
           {providerMessage && <div className="settings-message"><Check size={15} /> {providerMessage}</div>}
+        </section>
+
+        <section className="glass settings-panel image-agent-panel">
+          <div className="panel-head">
+            <div>
+              <div className="section-label mono">IMAGE AGENTS</div>
+              <h2>图像 Agent</h2>
+            </div>
+            <Image size={20} className="accent" />
+          </div>
+          <p className="muted small">
+            每个任务走独立模型。这里填的是模型 ID；特殊 CG 只作为界面展示名，不额外标注内容类型。
+          </p>
+          <div className="field-row">
+            <label className="field">
+              <span>远景</span>
+              <input value={agentDistant} onChange={(event) => setAgentDistant(event.target.value)} />
+            </label>
+            <label className="field">
+              <span>具体场景</span>
+              <input value={agentScene} onChange={(event) => setAgentScene(event.target.value)} />
+            </label>
+          </div>
+          <div className="field-row">
+            <label className="field">
+              <span>特殊CG</span>
+              <input value={agentSpecialCg} onChange={(event) => setAgentSpecialCg(event.target.value)} />
+            </label>
+            <label className="field">
+              <span>草稿</span>
+              <input value={agentDraft} onChange={(event) => setAgentDraft(event.target.value)} />
+            </label>
+          </div>
+          <div className="field-row">
+            <label className="field">
+              <span>角色最终图 / 设定图</span>
+              <input
+                value={agentCharacterFinal}
+                onChange={(event) => setAgentCharacterFinal(event.target.value)}
+              />
+            </label>
+            <label className="field">
+              <span>日常角色差分</span>
+              <input
+                value={agentCharacterDiff}
+                onChange={(event) => setAgentCharacterDiff(event.target.value)}
+              />
+            </label>
+          </div>
+          <button className="btn btn-primary" onClick={() => void saveImageAgents()}>
+            <Save size={15} /> 保存图像 Agent 路由
+          </button>
+          {imageAgentMessage && (
+            <div className="settings-message"><Check size={15} /> {imageAgentMessage}</div>
+          )}
         </section>
 
         <section className="glass settings-panel plugin-link-panel">

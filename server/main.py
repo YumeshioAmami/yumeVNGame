@@ -53,6 +53,14 @@ class SettingsUpdate(BaseModel):
     base_url: str | None = None
     tts_endpoint: str | None = None
     tts_voice: str | None = None
+    image_provider: str | None = None
+    music_provider: str | None = None
+    image_agent_distant: str | None = None
+    image_agent_scene: str | None = None
+    image_agent_special_cg: str | None = None
+    image_agent_draft: str | None = None
+    image_agent_character_final: str | None = None
+    image_agent_character_diff: str | None = None
 
 
 class SecretRequest(BaseModel):

@@ -122,6 +122,12 @@ export interface Settings {
   tts_voice: string;
   image_provider: string;
   music_provider: string;
+  image_agent_distant: string;
+  image_agent_scene: string;
+  image_agent_special_cg: string;
+  image_agent_draft: string;
+  image_agent_character_final: string;
+  image_agent_character_diff: string;
 }
 
 export interface ProviderKeyStatus {
