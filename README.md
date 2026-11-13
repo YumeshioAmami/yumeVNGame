@@ -145,6 +145,8 @@ The key is saved encrypted at:
 
 The master key is stored separately at `%APPDATA%\yumeVNGame\master.key`. Neither file is inside the repository.
 
+Low-VRAM users can use online image / music APIs instead of local models. See `docs/MODEL_RECOMMENDATIONS.md` for API-first options.
+
 ## External dataset packs
 
 The core repository intentionally ships **no third-party plot summaries, game scripts, images, music, or voice assets**.

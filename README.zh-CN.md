@@ -145,6 +145,8 @@ Key 加密保存在：
 
 主密钥单独保存在 `%APPDATA%\yumeVNGame\master.key`。两个文件都不在仓库里。
 
+显存较低的用户可以直接使用在线图片 / 音乐 API，详见 `docs/MODEL_RECOMMENDATIONS.md`。
+
 ## 外置数据集包
 
 核心仓库故意不内置任何第三方剧情摘要、游戏脚本、图片、音乐或语音素材。
