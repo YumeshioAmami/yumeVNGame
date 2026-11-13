@@ -19,6 +19,8 @@ yumeVNGame 运行在原生桌面窗口中，不是网页产品。
 - **本地存储：** SQLite + 本地素材 / 插件目录
 - **启动：** `start.bat` 或 `start.ps1`
 - **仅开发用：** `dev.bat` 或 `npm run dev`（Vite + API 浏览器开发模式）
+- **单实例：** 重复启动只会聚焦已打开窗口，不会再开第二个应用
+- **自动重启：** `watch-desktop.bat` 在源码变化后自动重启桌面版
 
 桌面启动器会启动本地 API、必要时构建前端、打开原生窗口，并在窗口关闭时关闭本地 API。
 
@@ -122,6 +124,19 @@ powershell -ExecutionPolicy Bypass -File start.ps1
 
 ```text
 dev.bat
+```
+
+桌面版源码自动重启：
+
+```text
+watch-desktop.bat
+```
+
+手动重启 / 停止：
+
+```text
+restart-desktop.bat
+stop-desktop.bat
 ```
 
 ## 配置文本模型

@@ -19,6 +19,8 @@ yumeVNGame runs as a native desktop window, not as a website.
 - **Local storage:** SQLite + local asset / plugin directories
 - **Launch:** `start.bat` or `start.ps1`
 - **Development only:** `dev.bat` or `npm run dev` (Vite + API in a browser)
+- **Single instance:** launching again focuses the existing window instead of opening a second app
+- **Auto-restart:** `watch-desktop.bat` restarts the source desktop app after file changes
 
 The desktop app starts the local API, builds the frontend bundle if needed, opens the native window, and shuts the local API down when the window closes.
 
@@ -122,6 +124,19 @@ For development only:
 
 ```text
 dev.bat
+```
+
+Desktop source auto-restart:
+
+```text
+watch-desktop.bat
+```
+
+Manual restart / stop:
+
+```text
+restart-desktop.bat
+stop-desktop.bat
 ```
 
 ## Configure a text model
