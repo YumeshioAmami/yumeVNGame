@@ -213,6 +213,7 @@ Key design documents:
 - `docs/MODEL_RECOMMENDATIONS.md`
 - `docs/IMAGE_AGENT_DESIGN.md`
 - `docs/TEXT_MODEL_TEST_2026-11-13.md`
+- `docs/SPECIAL_STORY_AGENT.md`
 - `docs/CHARACTER_CONSISTENCY.md`
 - `docs/CHARACTER_PIPELINE.md`
 - `docs/API_KEYS.md`
