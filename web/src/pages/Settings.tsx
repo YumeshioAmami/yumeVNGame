@@ -19,6 +19,12 @@ import ProviderKeyRow from "../components/ProviderKeyRow";
 
 const IMAGE_PROVIDERS = [
   {
+    id: "nanogpt",
+    name: "NanoGPT",
+    hint: "Qwen Image 3 / Qwen Edit Uncensored / Seedream / Pony，低门槛按量 API",
+    keyUrl: "https://nano-gpt.com/api",
+  },
+  {
     id: "fal",
     name: "fal.ai",
     hint: "Nano Banana / FLUX / Z Image / Qwen 等图片模型",
@@ -325,6 +331,7 @@ export default function Settings() {
             <label className="field">
               <span>默认图片 API</span>
               <select value={imageProvider} onChange={(event) => setImageProvider(event.target.value)}>
+                <option value="nanogpt">NanoGPT</option>
                 <option value="fal">fal.ai</option>
                 <option value="replicate">Replicate</option>
                 <option value="novelai">NovelAI</option>

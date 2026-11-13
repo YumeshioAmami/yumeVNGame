@@ -5,6 +5,35 @@
 
 设置页现在有 **图片与音乐 API Keys** 面板，可以直接填 fal / Replicate / NovelAI / Stability / ElevenLabs 的 Key。
 
+## 0. NanoGPT（低门槛按量 API）
+
+注册：
+
+<https://nano-gpt.com/>
+
+创建 Key：
+
+1. 登录后打开 API 页面：<https://nano-gpt.com/api>
+2. 点击 **Create API key**；
+3. 复制 Key；
+4. 在 Usage & billing / Pricing 页面充值；
+5. 最低可从 **$0.10 加密货币** 或 **$1 银行卡** 开始。
+
+API：
+
+```text
+Base URL: https://api.nano-gpt.com/api/v1
+Authorization: Bearer YOUR_API_KEY
+```
+
+图片模型列表：
+
+```text
+GET https://api.nano-gpt.com/api/v1/images/models
+```
+
+这个接口会返回每个模型的能力和 `capabilities.nsfw` 标记，可以直接筛选支持 NSFW / image-to-image 的模型。
+
 ## 1. fal.ai
 
 注册 / 登录：

@@ -21,6 +21,7 @@ SECRETS_PATH = APP_DIR / "secrets.enc"
 
 PROVIDERS: dict[str, dict[str, str]] = {
     "deepseek": {"name": "DeepSeek", "kind": "text", "key_name": "deepseek_api_key"},
+    "nanogpt": {"name": "NanoGPT", "kind": "image", "key_name": "nanogpt_api_key"},
     "fal": {"name": "fal.ai", "kind": "image", "key_name": "fal_api_key"},
     "replicate": {"name": "Replicate", "kind": "image", "key_name": "replicate_api_key"},
     "novelai": {"name": "NovelAI", "kind": "image", "key_name": "novelai_api_key"},
