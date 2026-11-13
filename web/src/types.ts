@@ -120,12 +120,23 @@ export interface Settings {
   base_url: string;
   tts_endpoint: string;
   tts_voice: string;
+  image_provider: string;
+  music_provider: string;
+}
+
+export interface ProviderKeyStatus {
+  id: string;
+  name: string;
+  kind: "text" | "image" | "music";
+  has_key: boolean;
+  masked_key: string;
 }
 
 export interface SecretsStatus {
   has_api_key: boolean;
   masked_key: string;
   storage: string;
+  providers: Record<string, ProviderKeyStatus>;
 }
 
 export interface PluginInfo {

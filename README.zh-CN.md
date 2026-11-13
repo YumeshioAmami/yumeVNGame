@@ -63,6 +63,7 @@ yumeVNGame 运行在原生桌面窗口中，不是网页产品。
 - 立绘差分查看；
 - 结局收集；
 - 按本地玩家持久化解锁状态。
+- fal / Replicate / NovelAI / Stability / ElevenLabs 的加密 API Key 管理。
 
 ### 插件系统
 

@@ -492,11 +492,13 @@ def stats(player_id: str = PLAYER_ID) -> dict[str, int]:
 
 def get_settings() -> dict[str, Any]:
     defaults = {
-        "theme": "aurora",
+        "theme": "morning",
         "model": "deepseek-chat",
         "base_url": "https://api.deepseek.com",
         "tts_endpoint": "",
         "tts_voice": "",
+        "image_provider": "fal",
+        "music_provider": "stability",
     }
     with _connect() as conn:
         rows = conn.execute("SELECT key, value FROM settings").fetchall()
@@ -506,7 +508,15 @@ def get_settings() -> dict[str, Any]:
 
 
 def set_settings(values: dict[str, Any]) -> dict[str, Any]:
-    allowed = {"theme", "model", "base_url", "tts_endpoint", "tts_voice"}
+    allowed = {
+        "theme",
+        "model",
+        "base_url",
+        "tts_endpoint",
+        "tts_voice",
+        "image_provider",
+        "music_provider",
+    }
     with _connect() as conn:
         for key, value in values.items():
             if key in allowed:

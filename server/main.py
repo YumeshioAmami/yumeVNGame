@@ -61,6 +61,10 @@ class SecretRequest(BaseModel):
     base_url: str | None = None
 
 
+class ProviderKeyRequest(BaseModel):
+    api_key: str = Field(min_length=4, max_length=4096)
+
+
 class PluginInstallRequest(BaseModel):
     filename: str
     data_base64: str
@@ -211,6 +215,24 @@ def set_secret(payload: SecretRequest) -> dict[str, Any]:
 @app.delete("/api/settings/secret")
 def delete_secret() -> dict[str, Any]:
     secrets.delete_secret("deepseek_api_key")
+    return {"settings": db.get_settings(), "secrets": secrets.public_status()}
+
+
+@app.put("/api/settings/keys/{provider}")
+def set_provider_key(provider: str, payload: ProviderKeyRequest) -> dict[str, Any]:
+    try:
+        secrets.set_provider_key(provider, payload.api_key)
+    except ValueError as exc:
+        raise HTTPException(404, str(exc)) from exc
+    return {"settings": db.get_settings(), "secrets": secrets.public_status()}
+
+
+@app.delete("/api/settings/keys/{provider}")
+def delete_provider_key(provider: str) -> dict[str, Any]:
+    try:
+        secrets.delete_provider_key(provider)
+    except ValueError as exc:
+        raise HTTPException(404, str(exc)) from exc
     return {"settings": db.get_settings(), "secrets": secrets.public_status()}
 
 

@@ -70,7 +70,10 @@ async function waitForText(page, selector, text) {
   await page.goto(`${base}/#/settings`, { waitUntil: "networkidle" });
   await waitForText(page, ".settings-page h1", "设置");
   await waitForText(page, ".plugin-link-panel h2", "插件与数据集");
-  console.log("PASS  settings");
+  await waitForText(page, ".provider-panel h2", "图片与音乐 API Keys");
+  const providerRows = await page.locator(".provider-row").count();
+  if (providerRows < 4) throw new Error(`provider rows too few: ${providerRows}`);
+  console.log("PASS  settings / provider keys");
 
   await browser.close();
   console.log("ALL UI SMOKE TESTS PASSED");

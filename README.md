@@ -63,6 +63,7 @@ The desktop app starts the local API, builds the frontend bundle if needed, open
 - Sprite differential viewer;
 - Ending collection;
 - Unlock state persisted per local player.
+- Encrypted API-key vault for fal / Replicate / NovelAI / Stability / ElevenLabs.
 
 ### Plugin system
 

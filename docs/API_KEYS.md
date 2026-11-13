@@ -3,6 +3,8 @@
 > 不要把 Key 发到 GitHub、Issue、截图或公开聊天里。  
 > yumeVNGame 会把 Key 加密保存在本机 `%APPDATA%\yumeVNGame\secrets.enc`。
 
+设置页现在有 **图片与音乐 API Keys** 面板，可以直接填 fal / Replicate / NovelAI / Stability / ElevenLabs 的 Key。
+
 ## 1. fal.ai
 
 注册 / 登录：

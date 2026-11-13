@@ -19,6 +19,15 @@ APP_DIR = _app_dir()
 MASTER_KEY_PATH = APP_DIR / "master.key"
 SECRETS_PATH = APP_DIR / "secrets.enc"
 
+PROVIDERS: dict[str, dict[str, str]] = {
+    "deepseek": {"name": "DeepSeek", "kind": "text", "key_name": "deepseek_api_key"},
+    "fal": {"name": "fal.ai", "kind": "image", "key_name": "fal_api_key"},
+    "replicate": {"name": "Replicate", "kind": "image", "key_name": "replicate_api_key"},
+    "novelai": {"name": "NovelAI", "kind": "image", "key_name": "novelai_api_key"},
+    "stability": {"name": "Stability AI", "kind": "music", "key_name": "stability_api_key"},
+    "elevenlabs": {"name": "ElevenLabs", "kind": "music", "key_name": "elevenlabs_api_key"},
+}
+
 
 def _fernet() -> Fernet:
     if not MASTER_KEY_PATH.exists():
@@ -83,11 +92,44 @@ def has_deepseek_key() -> bool:
     return bool(deepseek_key())
 
 
+def provider_key(provider: str) -> str | None:
+    meta = PROVIDERS.get(provider)
+    return get_secret(meta["key_name"]) if meta else None
+
+
+def set_provider_key(provider: str, value: str) -> None:
+    meta = PROVIDERS.get(provider)
+    if not meta:
+        raise ValueError(f"unknown provider: {provider}")
+    value = value.strip()
+    if not value:
+        raise ValueError("api key cannot be empty")
+    set_secret(meta["key_name"], value)
+
+
+def delete_provider_key(provider: str) -> None:
+    meta = PROVIDERS.get(provider)
+    if not meta:
+        raise ValueError(f"unknown provider: {provider}")
+    delete_secret(meta["key_name"])
+
+
 def public_status() -> dict[str, Any]:
     key = deepseek_key()
+    providers = {}
+    for provider, meta in PROVIDERS.items():
+        value = get_secret(meta["key_name"])
+        providers[provider] = {
+            "id": provider,
+            "name": meta["name"],
+            "kind": meta["kind"],
+            "has_key": bool(value),
+            "masked_key": mask(value),
+        }
     return {
         "has_api_key": bool(key),
         "masked_key": mask(key),
         "storage": str(SECRETS_PATH),
+        "providers": providers,
     }
 

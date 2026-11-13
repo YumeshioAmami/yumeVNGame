@@ -3,7 +3,9 @@ import { Link } from "react-router-dom";
 import {
   ArrowRight,
   Check,
+  Image,
   KeyRound,
+  Music,
   Package,
   Palette,
   Save,
@@ -13,6 +15,43 @@ import {
 } from "lucide-react";
 import { api } from "../api";
 import { useApp } from "../app-context";
+import ProviderKeyRow from "../components/ProviderKeyRow";
+
+const IMAGE_PROVIDERS = [
+  {
+    id: "fal",
+    name: "fal.ai",
+    hint: "Nano Banana / FLUX / Z Image / Qwen 等图片模型",
+    keyUrl: "https://fal.ai/dashboard/keys",
+  },
+  {
+    id: "replicate",
+    name: "Replicate",
+    hint: "Qwen Image Edit / FLUX Kontext / Seedream / SDXL",
+    keyUrl: "https://replicate.com/account/api-tokens",
+  },
+  {
+    id: "novelai",
+    name: "NovelAI",
+    hint: "动漫向、订阅制、可选 NSFW 单图通道",
+    keyUrl: "https://novelai.net/",
+  },
+];
+
+const MUSIC_PROVIDERS = [
+  {
+    id: "stability",
+    name: "Stability AI",
+    hint: "Stable Audio API：BGM loop / 环境氛围",
+    keyUrl: "https://platform.stability.ai/account/keys",
+  },
+  {
+    id: "elevenlabs",
+    name: "ElevenLabs",
+    hint: "Music API：完整歌曲 / 主题曲",
+    keyUrl: "https://elevenlabs.io/app/settings/api-keys",
+  },
+];
 
 const THEMES = [
   { id: "morning", label: "晨光 Morning", desc: "奶油白、浅杏、淡紫。最温柔的一档。" },
@@ -28,7 +67,10 @@ export default function Settings() {
   const [baseUrl, setBaseUrl] = useState(data.settings.base_url);
   const [ttsEndpoint, setTtsEndpoint] = useState(data.settings.tts_endpoint);
   const [ttsVoice, setTtsVoice] = useState(data.settings.tts_voice);
+  const [imageProvider, setImageProvider] = useState(data.settings.image_provider || "fal");
+  const [musicProvider, setMusicProvider] = useState(data.settings.music_provider || "stability");
   const [message, setMessage] = useState<string | null>(null);
+  const [providerMessage, setProviderMessage] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
   async function saveKey() {
@@ -78,6 +120,20 @@ export default function Settings() {
       setMessage(err instanceof Error ? err.message : "保存失败");
     } finally {
       setBusy(false);
+    }
+  }
+
+  async function saveProviderDefaults() {
+    setProviderMessage(null);
+    try {
+      await api.updateSettings({
+        image_provider: imageProvider,
+        music_provider: musicProvider,
+      });
+      await refresh();
+      setProviderMessage("默认 API 通道已保存。");
+    } catch (err) {
+      setProviderMessage(err instanceof Error ? err.message : "保存失败");
     }
   }
 
@@ -207,6 +263,86 @@ export default function Settings() {
             <Save size={15} /> 保存设置
           </button>
           {message && <div className="settings-message"><Check size={15} /> {message}</div>}
+        </section>
+
+        <section className="glass settings-panel provider-panel">
+          <div className="panel-head">
+            <div>
+              <div className="section-label mono">IMAGE / MUSIC APIs</div>
+              <h2>图片与音乐 API Keys</h2>
+            </div>
+            <KeyRound size={20} className="accent" />
+          </div>
+          <p className="muted small">
+            Key 会加密保存在本机。这里保存后，下一步的图片 / 音乐 adapter 会直接读取对应 provider。
+          </p>
+
+          <div className="provider-section-head"><Image size={16} /> 图片 API</div>
+          <div className="provider-grid">
+            {IMAGE_PROVIDERS.map((meta) => {
+              const status = data.secrets.providers?.[meta.id] ?? {
+                id: meta.id,
+                name: meta.name,
+                kind: "image" as const,
+                has_key: false,
+                masked_key: "",
+              };
+              return (
+                <ProviderKeyRow
+                  key={meta.id}
+                  provider={status}
+                  hint={meta.hint}
+                  keyUrl={meta.keyUrl}
+                  onChanged={refresh}
+                />
+              );
+            })}
+          </div>
+
+          <div className="provider-section-head"><Music size={16} /> 音乐 / BGM API</div>
+          <div className="provider-grid">
+            {MUSIC_PROVIDERS.map((meta) => {
+              const status = data.secrets.providers?.[meta.id] ?? {
+                id: meta.id,
+                name: meta.name,
+                kind: "music" as const,
+                has_key: false,
+                masked_key: "",
+              };
+              return (
+                <ProviderKeyRow
+                  key={meta.id}
+                  provider={status}
+                  hint={meta.hint}
+                  keyUrl={meta.keyUrl}
+                  onChanged={refresh}
+                />
+              );
+            })}
+          </div>
+
+          <div className="provider-defaults">
+            <label className="field">
+              <span>默认图片 API</span>
+              <select value={imageProvider} onChange={(event) => setImageProvider(event.target.value)}>
+                <option value="fal">fal.ai</option>
+                <option value="replicate">Replicate</option>
+                <option value="novelai">NovelAI</option>
+              </select>
+            </label>
+            <label className="field">
+              <span>默认音乐 API</span>
+              <select value={musicProvider} onChange={(event) => setMusicProvider(event.target.value)}>
+                <option value="stability">Stability AI</option>
+                <option value="elevenlabs">ElevenLabs</option>
+                <option value="replicate">Replicate</option>
+              </select>
+            </label>
+            <button className="btn btn-primary" onClick={() => void saveProviderDefaults()}>
+              <Save size={15} /> 保存默认通道
+            </button>
+          </div>
+          {providerMessage && <div className="settings-message"><Check size={15} /> {providerMessage}</div>}
         </section>
 
         <section className="glass settings-panel plugin-link-panel">

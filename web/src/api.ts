@@ -76,6 +76,16 @@ export const api = {
       "/settings/secret",
       { method: "DELETE" },
     ),
+  setProviderKey: (provider: string, api_key: string) =>
+    request<{ settings: import("./types").Settings; secrets: import("./types").SecretsStatus }>(
+      `/settings/keys/${provider}`,
+      { method: "PUT", body: JSON.stringify({ api_key }) },
+    ),
+  clearProviderKey: (provider: string) =>
+    request<{ settings: import("./types").Settings; secrets: import("./types").SecretsStatus }>(
+      `/settings/keys/${provider}`,
+      { method: "DELETE" },
+    ),
   dataset: () =>
     request<{ summary: Record<string, unknown>; preview: Array<Record<string, unknown>> }>(
       "/dataset",
