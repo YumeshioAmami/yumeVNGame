@@ -25,7 +25,7 @@ export default function StoryCard({
       >
         <div className="story-cover-shade" />
         <div className="story-source mono">
-          {story.source === "ai" ? "AI COMPILED" : "DEMO PACKAGE"}
+          {story.source === "ai" ? "AI 故事" : "示例故事"}
         </div>
         <div className="story-open">
           <ArrowUpRight size={16} />
@@ -34,7 +34,7 @@ export default function StoryCard({
       <div className="story-body">
         <div className="story-meta mono">
           <span>{story.theme || "UNTITLED"}</span>
-          <span>{story.node_count} NODES</span>
+          <span>{story.node_count} 幕</span>
         </div>
         <h3>{story.title}</h3>
         <p>{story.logline || story.synopsis}</p>
@@ -47,9 +47,9 @@ export default function StoryCard({
           <Tag>{story.tone}</Tag>
         </div>
         <div className="story-stats">
-          <span><GitBranch size={14} /> {story.ending_count} endings</span>
-          <span><Users size={14} /> {story.character_count} cast</span>
-          <span><Sparkles size={14} /> {story.status}</span>
+          <span><GitBranch size={14} /> {story.ending_count} 个结局</span>
+          <span><Users size={14} /> {story.character_count} 位角色</span>
+          <span><Sparkles size={14} /> {story.status === "ready" ? "可玩" : story.status}</span>
         </div>
       </div>
     </Link>

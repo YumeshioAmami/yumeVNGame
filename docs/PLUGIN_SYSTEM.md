@@ -49,7 +49,7 @@ Every plugin is a directory containing `plugin.json`:
 ## Install flow
 
 1. User builds or receives a `.zip` plugin pack.
-2. User opens **设置 → 外部数据集与插件包**.
+2. User opens the **Plugins** page.
 3. App uploads the zip as base64 JSON, validates it, checks path traversal, extracts it into:
 
 ```text

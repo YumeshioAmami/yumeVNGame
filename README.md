@@ -10,8 +10,6 @@ Repository: <https://github.com/YumeshioAmami/yumeVNGame>
 
 **Current status: `0.1.0` source prototype.** This is not a packaged release. `1.0.0` is reserved for after user acceptance and after real image / audio backends are connected.
 
-![Home](docs/screenshots/home.jpg)
-
 ## Desktop application
 
 yumeVNGame runs as a native desktop window, not as a website.
@@ -38,6 +36,7 @@ The desktop app starts the local API, builds the frontend bundle if needed, open
 ### Story runtime
 
 - Native desktop window with local FastAPI backend;
+- Soft story-room UI with Morning / Sakura / Mint / Night themes;
 - Full-screen visual novel stage;
 - Typewriter dialogue, narration, speaker colors;
 - Branch choices with hints;
@@ -78,23 +77,9 @@ asset_pack   bundled mixed assets
 theme        UI theme packs
 ```
 
-The first implemented type is `dataset`. Users install `.zip` packs from **Settings → External dataset / plugins**. The core repository ships only an original example dataset plugin, not third-party plot summaries or commercial game content.
+The first implemented type is `dataset`. Users install `.zip` packs from the **Plugins** page. The core repository ships only an original example dataset plugin, not third-party plot summaries or commercial game content.
 
 See `docs/PLUGIN_SYSTEM.md` and `datasets/README.md`.
-
-## Screenshots
-
-| Story library | Story compiler |
-|---|---|
-| ![Library](docs/screenshots/home.jpg) | ![Compiler](docs/screenshots/create.jpg) |
-
-| VN player | Branch choices |
-|---|---|
-| ![Player](docs/screenshots/player.jpg) | ![Choices](docs/screenshots/choices.jpg) |
-
-| Memory gallery | Settings / plugins |
-|---|---|
-| ![Gallery](docs/screenshots/gallery.jpg) | ![Settings](docs/screenshots/settings.jpg) |
 
 ## Tech stack
 
@@ -178,7 +163,7 @@ datasets/local/text_vn/                 # gitignored local pack
 dist_plugins/text-vn-official-0.1.0.zip # installable plugin pack
 ```
 
-Install the zip from **Settings → External dataset / plugins**. The pack is stored in:
+Install the zip from the **Plugins** page. The pack is stored in:
 
 ```text
 %APPDATA%\yumeVNGame\plugins\<plugin-id>\
@@ -193,9 +178,11 @@ server/               FastAPI API, SQLite layer, DeepSeek client, encrypted secr
 scripts/              asset generation, dataset builder, packaging, smoke tests, validators
 plugins/              plugin format + original example dataset plugin
 datasets/             external dataset workspace (local packs gitignored)
-docs/                 design documents, plugin system, prototype notes, screenshots
+docs/                 design documents, plugin system, prototype notes
 data/                 local runtime database (gitignored)
 ```
+
+UI screenshots, generated placeholder art and user data stay local and are never committed.
 
 Key design documents:
 
@@ -205,6 +192,7 @@ Key design documents:
 - `docs/DATA_AND_QUALITY.md`
 - `docs/MODEL_AND_DEGRADATION.md`
 - `docs/PLUGIN_SYSTEM.md`
+- `docs/MODEL_RECOMMENDATIONS.md`
 - `docs/MVP_PLAN.md`
 - `docs/PROTOTYPE_NOTES.md`
 

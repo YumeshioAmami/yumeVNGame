@@ -14,11 +14,11 @@ const PROMPT_CHIPS = [
 ];
 
 const STEPS = [
-  "解析创作需求",
-  "设计完整故事图",
-  "分配角色与场景",
-  "编译视觉账本",
-  "封存故事包",
+  "听听你的想法",
+  "想清楚整个故事",
+  "安排角色和场景",
+  "让画面出现",
+  "把故事收好",
 ];
 
 export default function Create() {
@@ -60,14 +60,14 @@ export default function Create() {
     <div className="page create-page">
       <header className="page-head">
         <div>
-          <div className="eyebrow mono"><span className="pulse-dot" /> STORY COMPILER</div>
-          <h1>编译一个新世界</h1>
+          <div className="eyebrow mono"><span className="pulse-dot" /> WRITE A STORY</div>
+          <h1>写一个新故事</h1>
           <p className="page-lead">
-            你只需要给出前提。导演会先设计完整故事图，再交给场景作家、视觉解析和回廊系统。
+            你只需要描述想要的感觉。剩下的，交给故事导演和一点点想象力。
           </p>
         </div>
         <div className="head-badge glass">
-          <span className="mono">MODEL</span>
+          <span className="mono">文本模型</span>
           <strong className="model-name">{data.settings.model}</strong>
         </div>
       </header>
@@ -80,8 +80,8 @@ export default function Create() {
         >
           <div className="panel-head">
             <div>
-              <div className="section-label mono">CREATIVE REQUEST</div>
-              <h2>你想看一个什么样的故事？</h2>
+              <div className="section-label mono">YOUR IDEA</div>
+              <h2>今天想写点什么？</h2>
             </div>
             <Wand2 size={20} className="accent" />
           </div>
@@ -158,14 +158,14 @@ export default function Create() {
 
           <button className="btn btn-primary generate-btn" onClick={() => void generate()} disabled={loading}>
             {loading ? <span className="spinner" /> : <Sparkles size={17} />}
-            {loading ? "正在编译故事..." : "开始编译"}
+            {loading ? "正在写故事..." : "开始写故事"}
           </button>
         </motion.section>
 
         <aside className="create-side">
           <div className="glass side-panel">
             <div className="section-label mono">PIPELINE</div>
-            <h3>故事编译链</h3>
+            <h3>创作流程</h3>
             <div className="step-list">
               {STEPS.map((item, index) => (
                 <div key={item} className={`step-row ${loading && index <= step ? "active" : ""}`}>
@@ -178,8 +178,8 @@ export default function Create() {
           </div>
 
           <div className="glass side-panel">
-            <div className="section-label mono">STYLE MEMORY</div>
-            <h3>风格参考库</h3>
+            <div className="section-label mono">STORY INSPIRATION</div>
+            <h3>故事灵感库</h3>
             <p className="muted small">
               已启用 {data.dataset.active_plugins || 0} 个数据集插件，共 {data.dataset.works || 0} 部作品样本。
               核心不内置第三方剧情、图片或音频，可在设置里安装外部插件包。

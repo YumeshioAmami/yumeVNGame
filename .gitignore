@@ -31,3 +31,11 @@ datasets/text_vn/raw/*.html
 datasets/local/
 dist_plugins/
 
+# Generated placeholder art, screenshots, user data and NSFW assets must never be committed.
+web/public/assets/
+docs/screenshots/
+generated/
+outputs/
+private/
+*.nsfw.*
+

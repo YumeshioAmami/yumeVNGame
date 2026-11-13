@@ -31,7 +31,7 @@ my-dataset-pack/
 }
 ```
 
-Install it from **设置 → 外部数据集 / 插件包 → 安装插件包** in the app.
+Install it from the **Plugins** page in the app.
 
 ## Building a local research pack
 

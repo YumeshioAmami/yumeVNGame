@@ -56,7 +56,7 @@ export default function Gallery() {
     <div className="page gallery-page">
       <header className="page-head">
         <div>
-          <div className="eyebrow mono"><span className="pulse-dot" /> MEMORY CORRIDOR</div>
+          <div className="eyebrow mono"><span className="pulse-dot" /> STORY MEMORIES</div>
           <h1>故事回廊</h1>
           <p className="page-lead">
             CG、场景、立绘差分和结局。解锁记录属于本地玩家，不随单个存档回退。
@@ -110,7 +110,7 @@ export default function Gallery() {
       {story && (
         <div className="gallery-footnote glass">
           <div>
-            <div className="section-label mono">CURRENT ARCHIVE</div>
+            <div className="section-label mono">CURRENT STORY</div>
             <h3>{story.title}</h3>
             <p>{story.logline}</p>
           </div>

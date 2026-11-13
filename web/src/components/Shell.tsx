@@ -5,6 +5,7 @@ import {
   Library,
   Wand2,
   Images,
+  Puzzle,
   Settings,
   ShieldCheck,
   Cpu,
@@ -17,14 +18,15 @@ const NAV = [
   { to: "/library", label: "故事库", icon: Library },
   { to: "/create", label: "创作", icon: Wand2 },
   { to: "/gallery", label: "回廊", icon: Images },
+  { to: "/plugins", label: "插件", icon: Puzzle },
   { to: "/settings", label: "设置", icon: Settings },
 ];
 
 const THEMES = [
-  { id: "aurora", label: "极光" },
-  { id: "neon", label: "霓虹" },
-  { id: "ember", label: "余烬" },
-  { id: "mono", label: "单色" },
+  { id: "morning", label: "晨光" },
+  { id: "sakura", label: "樱雾" },
+  { id: "mint", label: "薄荷" },
+  { id: "night", label: "夜灯" },
 ];
 
 export default function Shell({ children }: { children: ReactNode }) {
@@ -45,7 +47,7 @@ export default function Shell({ children }: { children: ReactNode }) {
           <div className="brand-mark">Y//</div>
           <div>
             <div className="brand-name">yumeVNGame</div>
-            <div className="mono brand-sub">AI VISUAL NOVEL RUNTIME</div>
+            <div className="mono brand-sub">A COZY STORY ROOM</div>
           </div>
         </div>
 
@@ -87,22 +89,22 @@ export default function Shell({ children }: { children: ReactNode }) {
         <div className="sidebar-section runtime-card">
           <div className="runtime-row">
             <Cpu size={15} />
-            <span>LOCAL CORE</span>
+            <span>本地运行中</span>
             <span className="status-dot online" />
           </div>
           <div className="runtime-row">
             <ShieldCheck size={15} />
-            <span>{data.secrets.has_api_key ? "KEY ENCRYPTED" : "KEY MISSING"}</span>
+            <span>{data.secrets.has_api_key ? "密钥已加密" : "等待密钥"}</span>
             <span className={`status-dot ${data.secrets.has_api_key ? "online" : "warn"}`} />
           </div>
           <div className="runtime-row">
             <Sparkles size={15} />
-            <span>{data.dataset.works || 0} STYLE WORKS</span>
+            <span>{data.dataset.works || 0} 个灵感样本</span>
           </div>
           <div className="runtime-meter">
             <span style={{ width: `${Math.min(100, (data.stats.gallery_unlocks || 0) * 4 + 18)}%` }} />
           </div>
-          <div className="mono micro muted">LOCAL-FIRST / NO CLOUD SYNC</div>
+          <div className="mono micro muted">所有数据留在本机</div>
         </div>
 
         <div className="sidebar-footer mono">

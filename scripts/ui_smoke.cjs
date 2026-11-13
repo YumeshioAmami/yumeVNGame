@@ -27,7 +27,7 @@ async function waitForText(page, selector, text) {
 
   await page.goto(`${base}/#/`, { waitUntil: "networkidle" });
   await waitForText(page, ".brand-name", "yumeVNGame");
-  await waitForText(page, ".hero h1", "把世界写成一封");
+  await waitForText(page, ".hero h1", "今晚，想走进");
   console.log("PASS  home");
 
   await page.goto(`${base}/#/play/demo-mistharbor`, {
@@ -61,12 +61,16 @@ async function waitForText(page, selector, text) {
   if (cards < 10) throw new Error(`gallery cards too few: ${cards}`);
   console.log("PASS  gallery");
 
-  await page.goto(`${base}/#/settings`, { waitUntil: "networkidle" });
-  await waitForText(page, ".settings-page h1", "设置");
-  await waitForText(page, ".plugin-panel h2", "外部数据集与插件包");
+  await page.goto(`${base}/#/plugins`, { waitUntil: "networkidle" });
+  await waitForText(page, ".plugins-page h1", "插件与数据集");
   const pluginCards = await page.locator(".plugin-card").count();
   if (pluginCards < 1) throw new Error(`plugin cards too few: ${pluginCards}`);
-  console.log("PASS  settings / plugins");
+  console.log("PASS  plugins page");
+
+  await page.goto(`${base}/#/settings`, { waitUntil: "networkidle" });
+  await waitForText(page, ".settings-page h1", "设置");
+  await waitForText(page, ".plugin-link-panel h2", "插件与数据集");
+  console.log("PASS  settings");
 
   await browser.close();
   console.log("ALL UI SMOKE TESTS PASSED");

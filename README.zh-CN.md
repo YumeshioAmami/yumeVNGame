@@ -10,8 +10,6 @@
 
 **当前状态：`0.1.0` 源码原型。** 这不是打包版。`1.0.0` 保留到你验收通过、并且真实图片 / 音频后端接上之后。
 
-![首页](docs/screenshots/home.jpg)
-
 ## 桌面应用
 
 yumeVNGame 运行在原生桌面窗口中，不是网页产品。
@@ -38,6 +36,7 @@ yumeVNGame 运行在原生桌面窗口中，不是网页产品。
 ### 故事运行时
 
 - 原生桌面窗口 + 本地 FastAPI 后端；
+- 柔和故事房间 UI，四套主题：晨光 / 樱雾 / 薄荷 / 夜灯；
 - 全屏视觉小说舞台；
 - 打字机对话、旁白、角色色；
 - 带提示的分支选择；
@@ -78,23 +77,9 @@ asset_pack   混合素材包
 theme        UI 主题包
 ```
 
-第一种已实现的类型是 `dataset`。用户在 **设置 → 外部数据集与插件包** 里安装 `.zip` 包。核心仓库只带一个原创示例数据集插件，不内置第三方剧情摘要或商业游戏内容。
+第一种已实现的类型是 `dataset`。用户在 **插件页** 里安装 `.zip` 包。核心仓库只带一个原创示例数据集插件，不内置第三方剧情摘要或商业游戏内容。
 
 详见 `docs/PLUGIN_SYSTEM.md` 和 `datasets/README.md`。
-
-## 截图
-
-| 故事库 | 故事编译 |
-|---|---|
-| ![故事库](docs/screenshots/home.jpg) | ![故事编译](docs/screenshots/create.jpg) |
-
-| VN 播放器 | 分支选择 |
-|---|---|
-| ![播放器](docs/screenshots/player.jpg) | ![分支](docs/screenshots/choices.jpg) |
-
-| 记忆回廊 | 设置 / 插件 |
-|---|---|
-| ![回廊](docs/screenshots/gallery.jpg) | ![设置](docs/screenshots/settings.jpg) |
 
 ## 技术栈
 
@@ -178,7 +163,7 @@ datasets/local/text_vn/                 # gitignored 本地包
 dist_plugins/text-vn-official-0.1.0.zip # 可安装插件包
 ```
 
-在 **设置 → 外部数据集与插件包** 中安装 zip。插件保存在：
+在 **插件页** 中安装 zip。插件保存在：
 
 ```text
 %APPDATA%\yumeVNGame\plugins\<plugin-id>\
@@ -193,9 +178,11 @@ server/               FastAPI、SQLite、DeepSeek 客户端、加密密钥、插
 scripts/              素材生成、数据集构建、打包、冒烟测试、校验器
 plugins/              插件格式 + 原创示例数据集插件
 datasets/             外置数据集工作目录（本地包 gitignored）
-docs/                 设计文档、插件系统、原型说明、截图
+docs/                 设计文档、插件系统、原型说明
 data/                 本地运行时数据库（gitignored）
 ```
+
+UI 截图、生成的占位素材和用户数据只保留在本地，绝不提交到仓库。
 
 核心设计文档：
 
@@ -205,6 +192,7 @@ data/                 本地运行时数据库（gitignored）
 - `docs/DATA_AND_QUALITY.md`
 - `docs/MODEL_AND_DEGRADATION.md`
 - `docs/PLUGIN_SYSTEM.md`
+- `docs/MODEL_RECOMMENDATIONS.md`
 - `docs/MVP_PLAN.md`
 - `docs/PROTOTYPE_NOTES.md`
 

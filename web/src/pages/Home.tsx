@@ -29,29 +29,29 @@ export default function Home() {
         >
           <div className="eyebrow mono">
             <span className="pulse-dot" />
-            AI-NATIVE NARRATIVE ENGINE / V0.1 PROTOTYPE
+            YUME STORY ROOM / 0.1.0
           </div>
           <h1>
-            把世界写成一封
-            <span className="gradient-text">会呼吸的信</span>
+            今晚，想走进
+            <span className="gradient-text">谁的故事？</span>
           </h1>
           <p className="hero-lead">
-            不是陪你聊天的 AI，而是会先想清楚整个故事，再把它编译成一部可玩的视觉小说。
-            分支、记忆、CG、场景回看，全部从第一天就属于故事本身。
+            不是冷冰冰的生成器。先让故事完整地存在，再陪你一幕一幕走进去。
+            分支、记忆、CG、回看，都留在故事里等你回来。
           </p>
           <div className="hero-actions">
             <Link to="/library" className="btn btn-primary">
-              进入故事库 <ArrowRight size={17} />
+              逛逛故事房间 <ArrowRight size={17} />
             </Link>
             <Link to="/create" className="btn btn-ghost">
-              <Wand2 size={17} /> 编译一个新故事
+              <Wand2 size={17} /> 写一个新故事
             </Link>
           </div>
           <div className="hero-tags">
-            <Tag tone="accent">持久世界</Tag>
-            <Tag tone="warm">分支叙事</Tag>
-            <Tag>本地优先</Tag>
-            <Tag>模型无关</Tag>
+            <Tag tone="accent">慢慢看</Tag>
+            <Tag tone="warm">有分支</Tag>
+            <Tag>会记住你</Tag>
+            <Tag>只在本机</Tag>
           </div>
         </motion.div>
 
@@ -64,21 +64,21 @@ export default function Home() {
           <div className="orbit-ring ring-a" />
           <div className="orbit-ring ring-b" />
           <div className="orbit-core">
-            <div className="orbit-core-label mono">STORY CORE</div>
+            <div className="orbit-core-label mono">STORY ROOM</div>
             <div className="orbit-core-num">{data.stories.length.toString().padStart(2, "0")}</div>
-            <div className="orbit-core-sub">compiled worlds</div>
+            <div className="orbit-core-sub">个故事房间</div>
           </div>
           <div className="orbit-node node-a">
             <BrainCircuit size={17} />
-            <span>DIRECTOR</span>
+            <span>导演</span>
           </div>
           <div className="orbit-node node-b">
             <GitBranch size={17} />
-            <span>ROUTE GRAPH</span>
+            <span>故事路线</span>
           </div>
           <div className="orbit-node node-c">
             <Images size={17} />
-            <span>VISUAL LEDGER</span>
+            <span>画面账本</span>
           </div>
           <div className="orbit-data mono">
             <span>KEY {data.secrets.has_api_key ? "READY" : "MISSING"}</span>
@@ -90,10 +90,10 @@ export default function Home() {
 
       <section className="stat-strip">
         {[
-          { label: "故事档案", value: data.stats.stories, icon: BookOpen },
-          { label: "回廊解锁", value: data.stats.gallery_unlocks, icon: Images },
+          { label: "故事房间", value: data.stats.stories, icon: BookOpen },
+          { label: "回忆碎片", value: data.stats.gallery_unlocks, icon: Images },
           { label: "本地存档", value: data.stats.saves, icon: GitBranch },
-          { label: "风格样本", value: data.dataset.works || 0, icon: Sparkles },
+          { label: "灵感样本", value: data.dataset.works || 0, icon: Sparkles },
         ].map((item, index) => {
           const Icon = item.icon;
           return (
@@ -118,10 +118,10 @@ export default function Home() {
         <div className="section-head">
           <div>
             <div className="section-label mono">COMPILED WORLDS</div>
-            <h2>最近的故事</h2>
+            <h2>最近的故事房间</h2>
           </div>
           <Link to="/library" className="text-link">
-            查看全部 <ArrowRight size={15} />
+            全部房间 <ArrowRight size={15} />
           </Link>
         </div>
         <div className="story-grid">
@@ -131,9 +131,9 @@ export default function Home() {
           <Link to="/create" className="story-card create-card">
             <div className="create-card-inner">
               <div className="create-glyph">+</div>
-              <h3>编译新世界</h3>
-              <p>给出一个前提，剩下的交给导演、场景作家和视觉账本。</p>
-              <span className="mono">AI STORY COMPILER</span>
+              <h3>写一个新故事</h3>
+              <p>给出一个感觉，剩下的交给导演、场景和一点点魔法。</p>
+              <span className="mono">START A NEW STORY</span>
             </div>
           </Link>
         </div>
@@ -143,20 +143,20 @@ export default function Home() {
         {[
           {
             step: "01",
-            title: "故事编译",
-            text: "先设计完整故事图、结局和伏笔，再生成正文。不是边写边编。",
+            title: "先想好故事",
+            text: "先让整个故事完整地存在，再一幕一幕展开。不是边写边编。",
             icon: BrainCircuit,
           },
           {
             step: "02",
-            title: "视觉解析",
-            text: "每个节点必须有背景或 CG；同地点复用，时段只换滤镜；立绘和差分按场景出场。",
+            title: "让画面出现",
+            text: "每个场景都有背景或 CG；同地点复用，时段换滤镜；该出现的人会带着差分出现。",
             icon: Images,
           },
           {
             step: "03",
-            title: "记忆回廊",
-            text: "存档、分支、CG、场景回看和立绘差分查看，都是故事包的正式组成。",
+            title: "把回忆留下",
+            text: "存档、分支、CG、场景回看和立绘差分查看，都是故事的一部分。",
             icon: GitBranch,
           },
         ].map((item, index) => {
@@ -185,7 +185,7 @@ export default function Home() {
         <div className="security-icon"><KeyRound size={22} /></div>
         <div>
           <div className="section-label mono">LOCAL SECURITY</div>
-          <h3>API Key 只存在于你的用户数据目录</h3>
+          <h3>你的密钥只留在这台电脑上</h3>
           <p>
             Key 使用 Fernet 加密后写入本机 <span className="mono">%APPDATA%/yumeVNGame</span>，
             不进入仓库、不进入故事包、不随任何请求上传到第三方存储。

@@ -9,13 +9,14 @@ import Library from "./pages/Library";
 import Create from "./pages/Create";
 import Player from "./pages/Player";
 import Gallery from "./pages/Gallery";
+import Plugins from "./pages/Plugins";
 import Settings from "./pages/Settings";
 
 export default function App() {
   const [data, setData] = useState<Bootstrap | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [theme, setThemeState] = useState(
-    () => localStorage.getItem("yume-theme") || "aurora",
+    () => localStorage.getItem("yume-theme") || "morning",
   );
 
   const setTheme = useCallback((next: string) => {
@@ -81,6 +82,7 @@ export default function App() {
           <Route path="/play/:storyId" element={<Player />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/gallery/:storyId" element={<Gallery />} />
+          <Route path="/plugins" element={<Plugins />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

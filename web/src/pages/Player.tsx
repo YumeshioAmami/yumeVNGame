@@ -268,9 +268,9 @@ export default function Player() {
       </div>
 
       <div className="vn-chapter mono">
-        <span>CHAPTER</span>
+          <span>第</span>
         <strong>{String(session.visited.length).padStart(2, "0")}</strong>
-        <span>/ {story.package?.nodes.length || 0}</span>
+          <span>幕 / {story.package?.nodes.length || 0}</span>
       </div>
 
       <motion.div
@@ -308,7 +308,7 @@ export default function Player() {
               {node.speaker || "旁白"}
             </span>
             <span className="mono dialogue-hint">
-              {busy ? "SYNCING..." : textDone ? (node.choices ? "CHOOSE A ROUTE" : "CLICK TO CONTINUE") : "TRANSMITTING"}
+              {busy ? "稍等..." : textDone ? (node.choices ? "选一条路" : "点一下继续") : "正在展开"}
             </span>
           </div>
           {node.narration && <p className="narration">{node.narration}</p>}

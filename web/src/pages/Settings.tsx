@@ -1,27 +1,24 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import {
+  ArrowRight,
   Check,
   KeyRound,
   Package,
   Palette,
   Save,
   ShieldCheck,
-  ToggleLeft,
-  ToggleRight,
   Trash2,
-  Upload,
   Volume2,
 } from "lucide-react";
 import { api } from "../api";
 import { useApp } from "../app-context";
-import Tag from "../components/Tag";
-import type { PluginInfo } from "../types";
 
 const THEMES = [
-  { id: "aurora", label: "极光 Aurora", desc: "青蓝 + 紫罗兰，冷静的未来感。" },
-  { id: "neon", label: "霓虹 Neon", desc: "青色 + 品红，赛博夜城。" },
-  { id: "ember", label: "余烬 Ember", desc: "琥珀 + 玫瑰，温暖但危险。" },
-  { id: "mono", label: "单色 Mono", desc: "银白 + 石墨，极简终端。" },
+  { id: "morning", label: "晨光 Morning", desc: "奶油白、浅杏、淡紫。最温柔的一档。" },
+  { id: "sakura", label: "樱雾 Sakura", desc: "樱花粉、雾紫、奶白。轻软、亲近。" },
+  { id: "mint", label: "薄荷 Mint", desc: "薄荷绿、天空蓝、奶油黄。清爽、安静。" },
+  { id: "night", label: "夜灯 Night", desc: "深紫、暖粉、灯光黄。适合夜里慢慢看。" },
 ];
 
 export default function Settings() {
@@ -33,14 +30,6 @@ export default function Settings() {
   const [ttsVoice, setTtsVoice] = useState(data.settings.tts_voice);
   const [message, setMessage] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
-  const [plugins, setPlugins] = useState<PluginInfo[]>([]);
-  const [pluginMessage, setPluginMessage] = useState<string | null>(null);
-  const [installing, setInstalling] = useState(false);
-  const fileRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    void api.plugins().then(setPlugins);
-  }, []);
 
   async function saveKey() {
     if (!keyInput.trim()) {
@@ -92,61 +81,18 @@ export default function Settings() {
     }
   }
 
-  async function installPlugin(file: File) {
-    setInstalling(true);
-    setPluginMessage(null);
-    try {
-      const bytes = new Uint8Array(await file.arrayBuffer());
-      let binary = "";
-      const chunk = 0x8000;
-      for (let index = 0; index < bytes.length; index += chunk) {
-        binary += String.fromCharCode(...bytes.subarray(index, index + chunk));
-      }
-      const plugin = await api.installPlugin(file.name, btoa(binary));
-      setPlugins(await api.plugins());
-      await refresh();
-      setPluginMessage(`已安装 ${plugin.name} v${plugin.version}，可在下方启用。`);
-    } catch (err) {
-      setPluginMessage(err instanceof Error ? err.message : "插件安装失败");
-    } finally {
-      setInstalling(false);
-    }
-  }
-
-  async function togglePlugin(plugin: PluginInfo) {
-    try {
-      await api.setPluginEnabled(plugin.id, !plugin.enabled);
-      setPlugins(await api.plugins());
-      await refresh();
-      setPluginMessage(`${plugin.name} 已${plugin.enabled ? "停用" : "启用"}。`);
-    } catch (err) {
-      setPluginMessage(err instanceof Error ? err.message : "插件状态更新失败");
-    }
-  }
-
-  async function removePlugin(plugin: PluginInfo) {
-    try {
-      await api.deletePlugin(plugin.id);
-      setPlugins(await api.plugins());
-      await refresh();
-      setPluginMessage(`${plugin.name} 已删除。`);
-    } catch (err) {
-      setPluginMessage(err instanceof Error ? err.message : "插件删除失败");
-    }
-  }
-
   return (
     <div className="page settings-page">
       <header className="page-head">
         <div>
-          <div className="eyebrow mono"><span className="pulse-dot" /> CONTROL ROOM</div>
+          <div className="eyebrow mono"><span className="pulse-dot" /> COZY CONTROL ROOM</div>
           <h1>设置</h1>
           <p className="page-lead">
-            模型、密钥、主题和本地数据。所有敏感信息只保存在本机用户数据目录。
+            模型、密钥、主题和声音。所有敏感信息都只留在这台电脑上。
           </p>
         </div>
         <div className="head-badge glass">
-          <span className="mono">SECURITY</span>
+          <span className="mono">PRIVACY</span>
           <strong className="security-badge"><ShieldCheck size={18} /> LOCAL</strong>
         </div>
       </header>
@@ -155,7 +101,7 @@ export default function Settings() {
         <section className="glass settings-panel">
           <div className="panel-head">
             <div>
-              <div className="section-label mono">MODEL GATEWAY</div>
+              <div className="section-label mono">TEXT MODEL</div>
               <h2>文本模型</h2>
             </div>
             <KeyRound size={20} className="accent" />
@@ -205,13 +151,13 @@ export default function Settings() {
         <section className="glass settings-panel">
           <div className="panel-head">
             <div>
-              <div className="section-label mono">VOICE LAYER</div>
+              <div className="section-label mono">VOICE</div>
               <h2>语音</h2>
             </div>
             <Volume2 size={20} className="accent" />
           </div>
           <p className="muted small">
-            v1 默认使用浏览器语音合成。GPT-SoVITS 适配器保留接口；填入本地服务地址后会在后续版本启用。
+            默认使用浏览器语音合成。GPT-SoVITS 适配器保留在本机，填入本地服务地址后即可尝试。
           </p>
           <label className="field">
             <span>GPT-SoVITS Endpoint</span>
@@ -238,7 +184,7 @@ export default function Settings() {
         <section className="glass settings-panel">
           <div className="panel-head">
             <div>
-              <div className="section-label mono">THEME MATRIX</div>
+              <div className="section-label mono">THEME</div>
               <h2>界面主题</h2>
             </div>
             <Palette size={20} className="accent" />
@@ -263,80 +209,25 @@ export default function Settings() {
           {message && <div className="settings-message"><Check size={15} /> {message}</div>}
         </section>
 
-        <section className="glass settings-panel plugin-panel">
+        <section className="glass settings-panel plugin-link-panel">
           <div className="panel-head">
             <div>
-              <div className="section-label mono">EXTERNAL DATASET / PLUGINS</div>
-              <h2>外部数据集与插件包</h2>
+              <div className="section-label mono">CONTENT PACKS</div>
+              <h2>插件与数据集</h2>
             </div>
             <Package size={20} className="accent" />
           </div>
           <p className="muted small">
-            核心仓库不内置第三方剧情、图片、音乐或语音。数据集、世界包、故事包、素材包都通过插件安装。
+            数据集、世界包、故事包、音乐、图片、语音和素材包都在独立插件页管理。
           </p>
           <div className="dataset-stats">
             <div><strong>{data.dataset.active_plugins || 0}</strong><span>启用插件</span></div>
             <div><strong>{data.dataset.works || 0}</strong><span>作品样本</span></div>
             <div><strong>EXTERNAL</strong><span>数据模式</span></div>
           </div>
-          <div className="plugin-actions">
-            <button className="btn btn-primary" onClick={() => fileRef.current?.click()} disabled={installing}>
-              <Upload size={15} /> {installing ? "正在安装..." : "安装插件包 (.zip)"}
-            </button>
-            <input
-              ref={fileRef}
-              type="file"
-              accept=".zip"
-              style={{ display: "none" }}
-              onChange={(event) => {
-                const file = event.target.files?.[0];
-                if (file) void installPlugin(file);
-                event.target.value = "";
-              }}
-            />
-          </div>
-          {pluginMessage && <div className="settings-message"><Check size={15} /> {pluginMessage}</div>}
-          <div className="plugin-list">
-            {plugins.map((plugin) => (
-              <div key={plugin.id} className={`plugin-card ${plugin.enabled ? "enabled" : ""}`}>
-                <div className="plugin-icon"><Package size={18} /></div>
-                <div className="plugin-info">
-                  <div className="plugin-title">
-                    <strong>{plugin.name}</strong>
-                    <Tag tone="accent">{plugin.type}</Tag>
-                  </div>
-                  <p>{plugin.description}</p>
-                  <div className="plugin-meta mono">
-                    <span>{plugin.id}</span>
-                    <span>v{plugin.version}</span>
-                    <span>{plugin.source}</span>
-                    {plugin.works > 0 && <span>{plugin.works} works</span>}
-                  </div>
-                  <div className="plugin-license mono">
-                    License: {plugin.license || "not specified"}
-                  </div>
-                </div>
-                <div className="plugin-controls">
-                  <button
-                    className="icon-btn"
-                    onClick={() => void togglePlugin(plugin)}
-                    title={plugin.enabled ? "停用" : "启用"}
-                  >
-                    {plugin.enabled ? <ToggleRight size={21} /> : <ToggleLeft size={21} />}
-                  </button>
-                  {plugin.source === "user" && (
-                    <button className="icon-btn" onClick={() => void removePlugin(plugin)} title="删除">
-                      <Trash2 size={16} />
-                    </button>
-                  )}
-                </div>
-              </div>
-            ))}
-            {plugins.length === 0 && <p className="muted small">没有发现插件。安装一个 .zip 插件包开始。</p>}
-          </div>
-          <p className="mono micro muted">
-            插件目录：%APPDATA%/yumeVNGame/plugins · 核心不内置第三方数据
-          </p>
+          <Link to="/plugins" className="btn btn-primary">
+            <Package size={15} /> 打开插件页 <ArrowRight size={15} />
+          </Link>
         </section>
       </div>
     </div>

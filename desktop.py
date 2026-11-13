@@ -15,6 +15,10 @@ DIST = ROOT / "web" / "dist" / "index.html"
 
 
 def ensure_frontend() -> None:
+    assets = ROOT / "web" / "public" / "assets" / "backgrounds"
+    if not assets.exists() or len(list(assets.glob("*.svg"))) < 6:
+        print("[desktop] generating local placeholder art...")
+        subprocess.run([sys.executable, "scripts/build_assets.py"], cwd=ROOT, check=True)
     sources = [ROOT / "web" / "index.html", ROOT / "package.json"]
     if (ROOT / "web" / "src").exists():
         sources.extend((ROOT / "web" / "src").rglob("*.tsx"))

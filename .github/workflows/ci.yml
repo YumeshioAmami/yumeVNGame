@@ -22,14 +22,20 @@ jobs:
       - name: Install frontend dependencies
         run: npm ci
 
+      - name: Install backend dependencies
+        run: pip install -r requirements.txt
+
+      - name: Check repository hygiene
+        run: python scripts/check_repo_hygiene.py
+
+      - name: Generate local placeholder art
+        run: python scripts/build_assets.py
+
       - name: Type-check frontend
         run: npx tsc --noEmit -p web/tsconfig.json
 
       - name: Build frontend
         run: npm run build
-
-      - name: Install backend dependencies
-        run: pip install -r requirements.txt
 
       - name: Validate story packages
         run: python scripts/validate_packages.py
