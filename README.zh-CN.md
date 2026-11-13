@@ -195,6 +195,7 @@ UI 截图、生成的占位素材和用户数据只保留在本地，绝不提�
 - `docs/MODEL_AND_DEGRADATION.md`
 - `docs/PLUGIN_SYSTEM.md`
 - `docs/MODEL_RECOMMENDATIONS.md`
+- `docs/CHARACTER_CONSISTENCY.md`
 - `docs/MVP_PLAN.md`
 - `docs/PROTOTYPE_NOTES.md`
 

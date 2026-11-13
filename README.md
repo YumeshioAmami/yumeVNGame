@@ -195,6 +195,7 @@ Key design documents:
 - `docs/MODEL_AND_DEGRADATION.md`
 - `docs/PLUGIN_SYSTEM.md`
 - `docs/MODEL_RECOMMENDATIONS.md`
+- `docs/CHARACTER_CONSISTENCY.md`
 - `docs/MVP_PLAN.md`
 - `docs/PROTOTYPE_NOTES.md`
 
