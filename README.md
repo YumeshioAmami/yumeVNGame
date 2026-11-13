@@ -212,6 +212,7 @@ Key design documents:
 - `docs/PLUGIN_SYSTEM.md`
 - `docs/MODEL_RECOMMENDATIONS.md`
 - `docs/IMAGE_AGENT_DESIGN.md`
+- `docs/TEXT_MODEL_TEST_2026-11-13.md`
 - `docs/CHARACTER_CONSISTENCY.md`
 - `docs/CHARACTER_PIPELINE.md`
 - `docs/API_KEYS.md`

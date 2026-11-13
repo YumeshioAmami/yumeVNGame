@@ -235,6 +235,9 @@ export default function Settings() {
           <p className="mono micro muted">
             硅基流动：https://api.siliconflow.cn/v1 · DeepSeek：https://api.deepseek.com
           </p>
+          <p className="mono micro muted">
+            填写 Key 后请点「加密保存 Key」；另一个「保存设置」只保存界面与语音配置。
+          </p>
           <div className="button-row">
             <button className="btn btn-primary" onClick={() => void saveKey()} disabled={busy}>
               <Save size={15} /> 加密保存 Key

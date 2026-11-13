@@ -212,6 +212,7 @@ UI 截图、生成的占位素材和用户数据只保留在本地，绝不提�
 - `docs/PLUGIN_SYSTEM.md`
 - `docs/MODEL_RECOMMENDATIONS.md`
 - `docs/IMAGE_AGENT_DESIGN.md`
+- `docs/TEXT_MODEL_TEST_2026-11-13.md`
 - `docs/CHARACTER_CONSISTENCY.md`
 - `docs/CHARACTER_PIPELINE.md`
 - `docs/API_KEYS.md`
