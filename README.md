@@ -161,7 +161,7 @@ The key is saved encrypted at:
 
 The master key is stored separately at `%APPDATA%\yumeVNGame\master.key`. Neither file is inside the repository.
 
-Low-VRAM users can use online image / music APIs instead of local models. See `docs/MODEL_RECOMMENDATIONS.md` for API-first options.
+Low-VRAM users can use online image / music APIs instead of local models; configure providers in the desktop Settings page.
 
 ## External dataset packs
 
@@ -196,32 +196,19 @@ server/               FastAPI API, SQLite layer, DeepSeek client, encrypted secr
 scripts/              asset generation, dataset builder, packaging, smoke tests, validators
 plugins/              plugin format + original example dataset plugin
 datasets/             external dataset workspace (local packs gitignored)
-docs/                 design documents, plugin system, prototype notes
+docs/                 public docs: plugin system, key setup, prototype plan
 data/                 local runtime database (gitignored)
 ```
 
 UI screenshots, generated placeholder art and user data stay local and are never committed.
 
-Key design documents:
+Public documents:
 
-- `docs/PROJECT_PLAN.md`
-- `docs/AGENT_AND_PRODUCTION.md`
-- `docs/DATA_MODEL_V0.md`
-- `docs/DATA_AND_QUALITY.md`
-- `docs/MODEL_AND_DEGRADATION.md`
 - `docs/PLUGIN_SYSTEM.md`
-- `docs/MODEL_RECOMMENDATIONS.md`
-- `docs/IMAGE_AGENT_DESIGN.md`
-- `docs/TEXT_MODEL_TEST_2026-11-13.md`
-- `docs/TEXT_AGENT_DESIGN.md`
-- `docs/MUSIC_AGENT_DESIGN.md`
-- `docs/SPECIAL_STORY_AGENT.md`
-- `docs/CHARACTER_CONSISTENCY.md`
-- `docs/CHARACTER_PIPELINE.md`
 - `docs/API_KEYS.md`
-- `docs/REFERENCE_DATASET.md`
 - `docs/MVP_PLAN.md`
-- `docs/PROTOTYPE_NOTES.md`
+
+Internal research notes, model comparisons, agent routing experiments, reference datasets, and content-design documents are kept in a private workspace and are not part of the public repository.
 
 ## Verification
 

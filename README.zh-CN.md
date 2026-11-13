@@ -161,7 +161,7 @@ Key 加密保存在：
 
 主密钥单独保存在 `%APPDATA%\yumeVNGame\master.key`。两个文件都不在仓库里。
 
-显存较低的用户可以直接使用在线图片 / 音乐 API，详见 `docs/MODEL_RECOMMENDATIONS.md`。
+显存较低的用户可以直接使用在线图片 / 音乐 API，在桌面端设置页里配置 provider。
 
 ## 外置数据集包
 
@@ -196,32 +196,19 @@ server/               FastAPI、SQLite、DeepSeek 客户端、加密密钥、插
 scripts/              素材生成、数据集构建、打包、冒烟测试、校验器
 plugins/              插件格式 + 原创示例数据集插件
 datasets/             外置数据集工作目录（本地包 gitignored）
-docs/                 设计文档、插件系统、原型说明
+docs/                 公开文档：插件系统、Key 指南、原型计划
 data/                 本地运行时数据库（gitignored）
 ```
 
 UI 截图、生成的占位素材和用户数据只保留在本地，绝不提交到仓库。
 
-核心设计文档：
+公开文档：
 
-- `docs/PROJECT_PLAN.md`
-- `docs/AGENT_AND_PRODUCTION.md`
-- `docs/DATA_MODEL_V0.md`
-- `docs/DATA_AND_QUALITY.md`
-- `docs/MODEL_AND_DEGRADATION.md`
 - `docs/PLUGIN_SYSTEM.md`
-- `docs/MODEL_RECOMMENDATIONS.md`
-- `docs/IMAGE_AGENT_DESIGN.md`
-- `docs/TEXT_MODEL_TEST_2026-11-13.md`
-- `docs/TEXT_AGENT_DESIGN.md`
-- `docs/MUSIC_AGENT_DESIGN.md`
-- `docs/SPECIAL_STORY_AGENT.md`
-- `docs/CHARACTER_CONSISTENCY.md`
-- `docs/CHARACTER_PIPELINE.md`
 - `docs/API_KEYS.md`
-- `docs/REFERENCE_DATASET.md`
 - `docs/MVP_PLAN.md`
-- `docs/PROTOTYPE_NOTES.md`
+
+内部研究笔记、模型对比、Agent 路由实验、参考数据集和内容设计文档保留在私有工作区，不进入公开仓库。
 
 ## 验证
 
