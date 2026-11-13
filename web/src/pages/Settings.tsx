@@ -398,7 +398,8 @@ export default function Settings() {
             <Image size={20} className="accent" />
           </div>
           <p className="muted small">
-            每个任务走独立模型。这里填的是模型 ID；特殊 CG 只作为界面展示名，不额外标注内容类型。
+            每个任务走独立模型。“草稿”默认用 FLUX.3 Klein 出构图 / 角度 / 姿势参考，
+            再由 Seedream 5.0 Flash 一次定版。特殊CG 只作为界面展示名。
           </p>
           <div className="field-row">
             <label className="field">
