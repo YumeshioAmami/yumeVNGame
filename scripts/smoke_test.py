@@ -1,8 +1,11 @@
 from __future__ import annotations
 
 import argparse
+import base64
+import io
 import json
 import sys
+import zipfile
 
 import requests
 
@@ -28,7 +31,13 @@ def main() -> None:
 
     boot = requests.get(f"{BASE}/bootstrap", timeout=20).json()
     check("bootstrap", bool(boot.get("stories")), str(boot)[:200])
-    check("dataset", boot.get("dataset", {}).get("works", 0) >= 10, str(boot.get("dataset")))
+    check("plugins", len(boot.get("plugins", [])) >= 1, str(boot.get("plugins"))[:300])
+    check(
+        "dataset plugin",
+        boot.get("dataset", {}).get("active_plugins", 0) >= 1
+        and boot.get("dataset", {}).get("works", 0) >= 1,
+        str(boot.get("dataset")),
+    )
 
     story_id = "demo-mistharbor"
     story = requests.get(f"{BASE}/stories/{story_id}", timeout=20).json()
@@ -65,7 +74,42 @@ def main() -> None:
     check("gallery unlock", any(entry.get("unlocked") for entry in gallery))
 
     dataset = requests.get(f"{BASE}/dataset", timeout=20).json()
-    check("dataset detail", len(dataset.get("preview", [])) >= 5, str(dataset.get("summary"))[:200])
+    check("dataset detail", len(dataset.get("preview", [])) >= 1, str(dataset.get("summary"))[:200])
+
+    # External plugin install / toggle / delete.
+    buffer = io.BytesIO()
+    with zipfile.ZipFile(buffer, "w") as archive:
+        archive.writestr(
+            "plugin.json",
+            json.dumps(
+                {
+                    "id": "smoke-plugin",
+                    "name": "Smoke Plugin",
+                    "version": "0.1.0",
+                    "type": "dataset",
+                    "description": "temporary plugin for smoke test",
+                    "enabled_by_default": False,
+                    "data_file": "works.jsonl",
+                }
+            ),
+        )
+        archive.writestr(
+            "works.jsonl",
+            json.dumps({"title_zh": "Smoke Story", "genres": ["test"]}) + "\n",
+        )
+    installed = requests.post(
+        f"{BASE}/plugins/install",
+        json={
+            "filename": "smoke-plugin.zip",
+            "data_base64": base64.b64encode(buffer.getvalue()).decode("ascii"),
+        },
+        timeout=20,
+    )
+    check("plugin install", installed.status_code == 200, installed.text[:300])
+    toggled = requests.put(f"{BASE}/plugins/smoke-plugin", json={"enabled": True}, timeout=20)
+    check("plugin toggle", toggled.status_code == 200 and toggled.json().get("enabled") is True)
+    deleted = requests.delete(f"{BASE}/plugins/smoke-plugin", timeout=20)
+    check("plugin delete", deleted.status_code == 200, deleted.text[:200])
 
     if args.generate:
         result = requests.post(

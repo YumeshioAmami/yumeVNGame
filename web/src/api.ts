@@ -80,6 +80,19 @@ export const api = {
     request<{ summary: Record<string, unknown>; preview: Array<Record<string, unknown>> }>(
       "/dataset",
     ),
+  plugins: () => request<import("./types").PluginInfo[]>("/plugins"),
+  installPlugin: (filename: string, data_base64: string) =>
+    request<import("./types").PluginInfo>("/plugins/install", {
+      method: "POST",
+      body: JSON.stringify({ filename, data_base64 }),
+    }),
+  setPluginEnabled: (pluginId: string, enabled: boolean) =>
+    request<import("./types").PluginInfo>(`/plugins/${pluginId}`, {
+      method: "PUT",
+      body: JSON.stringify({ enabled }),
+    }),
+  deletePlugin: (pluginId: string) =>
+    request<{ ok: boolean }>(`/plugins/${pluginId}`, { method: "DELETE" }),
   tts: (text: string) =>
     request<{
       mode: string;

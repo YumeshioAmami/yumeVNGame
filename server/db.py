@@ -516,3 +516,17 @@ def set_settings(values: dict[str, Any]) -> dict[str, Any]:
                 )
     return get_settings()
 
+
+def get_setting(key: str, default: str | None = None) -> str | None:
+    with _connect() as conn:
+        row = conn.execute("SELECT value FROM settings WHERE key = ?", (key,)).fetchone()
+    return row["value"] if row else default
+
+
+def set_setting(key: str, value: str) -> None:
+    with _connect() as conn:
+        conn.execute(
+            "INSERT OR REPLACE INTO settings(key, value) VALUES (?, ?)",
+            (key, str(value)),
+        )
+

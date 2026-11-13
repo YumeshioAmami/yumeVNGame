@@ -1,7 +1,7 @@
 {
   "name": "yumevngame",
   "private": true,
-  "version": "1.0.0",
+  "version": "0.1.0",
   "type": "module",
   "description": "AI-native visual novel runtime with persistent worlds, branching stories, and a modern glass UI.",
   "scripts": {

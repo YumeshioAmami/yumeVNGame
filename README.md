@@ -6,6 +6,8 @@
 
 Repository: <https://github.com/YumeshioAmami/yumeVNGame>
 
+**Current status: `0.1.0` source prototype.** There is no packaged release yet. `1.0.0` is reserved for after acceptance and after real image / audio backends are connected.
+
 ![Home](docs/screenshots/home.jpg)
 
 ## What is this?
@@ -91,6 +93,8 @@ npm install
 pip install -r requirements.txt
 ```
 
+On Windows, you can also double-click `start.bat` (or run `powershell -ExecutionPolicy Bypass -File start.ps1`). The launcher installs missing dependencies and opens the source dev server.
+
 Start the local API and Vite dev server:
 
 ```bash
@@ -133,24 +137,31 @@ Neither file is inside the repository.
 
 > The model name is configurable. `deepseek-chat` is the default because it produces stable structured JSON faster through the tested OpenAI-compatible endpoint.
 
-## Dataset
+## Datasets are external plugins
 
-The text dataset lives at `datasets/text_vn/`.
+The core repository intentionally ships **no third-party plot summaries, game scripts, images, music, or voice assets**.
 
-- 17 real visual novel works;
-- Chinese plot summaries from public encyclopedia sources;
-- editorial metadata: genres, themes, narrative devices, pacing and character notes;
-- source URLs and license notes;
-- style notes for prompting.
+- text datasets are optional plugin packs;
+- the same plugin system is designed for world packs, story packs, music packs, image / sprite packs, voice packs, and asset packs;
+- users install `.zip` plugin packs from **设置 → 外部数据集与插件包**;
+- an official dataset pack can be built locally and distributed separately with its own attribution;
+- the core app stays free of third-party content licensing risk.
 
-Rebuild:
+Build an external research pack:
 
 ```bash
 python scripts/build_text_dataset.py
+python scripts/package_dataset_plugin.py
 ```
 
-The dataset deliberately does **not** package game binaries or full commercial scripts. See `datasets/text_vn/README.md`.
-Attribution and content-license notes are in `datasets/text_vn/NOTICE.md`.
+Outputs:
+
+```text
+datasets/local/text_vn/                 # gitignored local pack
+dist_plugins/text-vn-official-0.1.0.zip # installable plugin pack
+```
+
+See `datasets/README.md` and `docs/PLUGIN_SYSTEM.md`.
 
 ## Architecture
 
@@ -158,7 +169,8 @@ Attribution and content-license notes are in `datasets/text_vn/NOTICE.md`.
 web/                 React UI, VN player, compiler, gallery, settings
 server/              FastAPI API, SQLite layer, DeepSeek client, encrypted secrets
 scripts/             asset generation, dataset builder, smoke tests, validators
-datasets/            curated text VN style dataset
+plugins/             plugin format + original example dataset plugin
+datasets/            external dataset workspace (local packs gitignored)
 docs/                design documents, MVP plan, screenshots
 data/                local runtime database (gitignored)
 ```
@@ -192,6 +204,10 @@ GET    /api/settings
 PUT    /api/settings
 POST   /api/settings/secret
 DELETE /api/settings/secret
+GET    /api/plugins
+POST   /api/plugins/install
+PUT    /api/plugins/{id}
+DELETE /api/plugins/{id}
 POST   /api/tts
 GET    /api/dataset
 ```
@@ -218,7 +234,7 @@ python scripts/smoke_test.py --generate
 npm run test:ui
 ```
 
-## Current v1.0 boundaries
+## Current 0.1.0 prototype boundaries
 
 Working:
 
@@ -228,10 +244,12 @@ Working:
 - save / load;
 - CG / scene / sprite / ending gallery;
 - local encrypted key storage;
-- 17-work text VN style dataset.
+- external dataset / plugin pack system (original example plugin bundled);
+- local source launcher (`start.bat` / `start.ps1`).
 
 Placeholder / next:
 
+- packaged installer / standalone build (not released yet);
 - real image generation backend;
 - real music generation backend;
 - tested GPT-SoVITS voice backend (adapter exists, browser TTS fallback works);

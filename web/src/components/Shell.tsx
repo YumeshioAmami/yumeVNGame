@@ -106,7 +106,7 @@ export default function Shell({ children }: { children: ReactNode }) {
         </div>
 
         <div className="sidebar-footer mono">
-          <span>v1.0.0</span>
+          <span>v0.1.0</span>
           <span>MIT</span>
         </div>
       </aside>

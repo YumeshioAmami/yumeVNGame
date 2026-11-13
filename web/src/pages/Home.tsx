@@ -29,7 +29,7 @@ export default function Home() {
         >
           <div className="eyebrow mono">
             <span className="pulse-dot" />
-            AI-NATIVE NARRATIVE ENGINE / V1.0
+            AI-NATIVE NARRATIVE ENGINE / V0.1 PROTOTYPE
           </div>
           <h1>
             把世界写成一封

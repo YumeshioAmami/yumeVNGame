@@ -1,0 +1,14 @@
+{
+  "id": "example-text-style",
+  "name": "Example Text Style Pack",
+  "version": "0.1.0",
+  "type": "dataset",
+  "description": "An original, non-copyrighted example of a text-style dataset plugin. It demonstrates the plugin format without shipping third-party game scripts.",
+  "author": "yumeVNGame contributors",
+  "license": "MIT (original editorial content only)",
+  "enabled_by_default": true,
+  "data_file": "works.jsonl",
+  "context_file": "style_notes.md",
+  "tags": ["dataset", "style", "example"]
+}
+

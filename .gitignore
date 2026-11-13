@@ -28,4 +28,6 @@ venv/
 # Scraped raw text is kept locally for research; curated metadata is committed.
 datasets/text_vn/raw/*.txt
 datasets/text_vn/raw/*.html
+datasets/local/
+dist_plugins/
 

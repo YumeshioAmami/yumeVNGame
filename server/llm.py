@@ -2,12 +2,11 @@ from __future__ import annotations
 
 import json
 import re
-from pathlib import Path
 from typing import Any
 
 import requests
 
-from . import db, secrets
+from . import db, plugins, secrets
 
 
 ALLOWED_BACKGROUNDS = [
@@ -144,11 +143,7 @@ class LLMError(RuntimeError):
 
 
 def _style_context() -> str:
-    path = Path(__file__).resolve().parent.parent / "datasets" / "text_vn" / "style_notes.md"
-    if not path.exists():
-        return ""
-    text = path.read_text(encoding="utf-8")
-    return text[:5000]
+    return plugins.dataset_context(5000)
 
 
 def _extract_json(text: str) -> dict[str, Any]:

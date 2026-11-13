@@ -11,13 +11,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
-from . import db, llm, secrets
+from . import db, llm, plugins, secrets
 
 
 ROOT = Path(__file__).resolve().parent.parent
 DIST = ROOT / "web" / "dist"
 
-app = FastAPI(title="yumeVNGame API", version="1.0.0")
+app = FastAPI(title="yumeVNGame API", version="0.1.0")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
@@ -61,29 +61,27 @@ class SecretRequest(BaseModel):
     base_url: str | None = None
 
 
+class PluginInstallRequest(BaseModel):
+    filename: str
+    data_base64: str
+
+
+class PluginToggleRequest(BaseModel):
+    enabled: bool
+
+
 @app.on_event("startup")
 def startup() -> None:
     db.init_db()
 
 
 def _dataset_summary() -> dict[str, Any]:
-    manifest_path = ROOT / "datasets" / "text_vn" / "manifest.json"
-    works_path = ROOT / "datasets" / "text_vn" / "works.jsonl"
-    if not manifest_path.exists():
-        return {"works": 0, "status": "not_built"}
-    try:
-        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    except json.JSONDecodeError:
-        manifest = {}
-    count = 0
-    if works_path.exists():
-        count = sum(1 for line in works_path.read_text(encoding="utf-8").splitlines() if line.strip())
-    return {"works": count, **manifest}
+    return plugins.dataset_summary()
 
 
 @app.get("/api/health")
 def health() -> dict[str, Any]:
-    return {"ok": True, "service": "yumeVNGame", "version": "1.0.0"}
+    return {"ok": True, "service": "yumeVNGame", "version": "0.1.0"}
 
 
 @app.get("/api/bootstrap")
@@ -94,6 +92,7 @@ def bootstrap() -> dict[str, Any]:
         "secrets": secrets.public_status(),
         "stats": db.stats(),
         "dataset": _dataset_summary(),
+        "plugins": plugins.list_plugins(),
     }
 
 
@@ -268,16 +267,37 @@ def tts(payload: dict[str, Any]) -> dict[str, Any]:
 @app.get("/api/dataset")
 def dataset() -> dict[str, Any]:
     summary = _dataset_summary()
-    works_path = ROOT / "datasets" / "text_vn" / "works.jsonl"
-    preview = []
-    if works_path.exists():
-        for line in works_path.read_text(encoding="utf-8").splitlines()[:8]:
-            if line.strip():
-                try:
-                    preview.append(json.loads(line))
-                except json.JSONDecodeError:
-                    pass
-    return {"summary": summary, "preview": preview}
+    return {"summary": summary, "preview": plugins.dataset_preview()}
+
+
+@app.get("/api/plugins")
+def plugin_list() -> list[dict[str, Any]]:
+    return plugins.list_plugins()
+
+
+@app.post("/api/plugins/install")
+def plugin_install(payload: PluginInstallRequest) -> dict[str, Any]:
+    try:
+        return plugins.install_plugin_zip(payload.filename, payload.data_base64)
+    except ValueError as exc:
+        raise HTTPException(400, str(exc)) from exc
+
+
+@app.put("/api/plugins/{plugin_id}")
+def plugin_toggle(plugin_id: str, payload: PluginToggleRequest) -> dict[str, Any]:
+    try:
+        return plugins.set_enabled(plugin_id, payload.enabled)
+    except ValueError as exc:
+        raise HTTPException(404, str(exc)) from exc
+
+
+@app.delete("/api/plugins/{plugin_id}")
+def plugin_delete(plugin_id: str) -> dict[str, Any]:
+    try:
+        plugins.delete_plugin(plugin_id)
+    except ValueError as exc:
+        raise HTTPException(400, str(exc)) from exc
+    return {"ok": True}
 
 
 if DIST.exists():

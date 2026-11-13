@@ -1,8 +1,21 @@
-import { useEffect, useState } from "react";
-import { Check, Database, KeyRound, Palette, Save, ShieldCheck, Trash2, Volume2 } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import {
+  Check,
+  KeyRound,
+  Package,
+  Palette,
+  Save,
+  ShieldCheck,
+  ToggleLeft,
+  ToggleRight,
+  Trash2,
+  Upload,
+  Volume2,
+} from "lucide-react";
 import { api } from "../api";
 import { useApp } from "../app-context";
 import Tag from "../components/Tag";
+import type { PluginInfo } from "../types";
 
 const THEMES = [
   { id: "aurora", label: "极光 Aurora", desc: "青蓝 + 紫罗兰，冷静的未来感。" },
@@ -20,10 +33,13 @@ export default function Settings() {
   const [ttsVoice, setTtsVoice] = useState(data.settings.tts_voice);
   const [message, setMessage] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
-  const [dataset, setDataset] = useState<{ summary: Record<string, unknown>; preview: Array<Record<string, unknown>> } | null>(null);
+  const [plugins, setPlugins] = useState<PluginInfo[]>([]);
+  const [pluginMessage, setPluginMessage] = useState<string | null>(null);
+  const [installing, setInstalling] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    void api.dataset().then(setDataset);
+    void api.plugins().then(setPlugins);
   }, []);
 
   async function saveKey() {
@@ -73,6 +89,49 @@ export default function Settings() {
       setMessage(err instanceof Error ? err.message : "保存失败");
     } finally {
       setBusy(false);
+    }
+  }
+
+  async function installPlugin(file: File) {
+    setInstalling(true);
+    setPluginMessage(null);
+    try {
+      const bytes = new Uint8Array(await file.arrayBuffer());
+      let binary = "";
+      const chunk = 0x8000;
+      for (let index = 0; index < bytes.length; index += chunk) {
+        binary += String.fromCharCode(...bytes.subarray(index, index + chunk));
+      }
+      const plugin = await api.installPlugin(file.name, btoa(binary));
+      setPlugins(await api.plugins());
+      await refresh();
+      setPluginMessage(`已安装 ${plugin.name} v${plugin.version}，可在下方启用。`);
+    } catch (err) {
+      setPluginMessage(err instanceof Error ? err.message : "插件安装失败");
+    } finally {
+      setInstalling(false);
+    }
+  }
+
+  async function togglePlugin(plugin: PluginInfo) {
+    try {
+      await api.setPluginEnabled(plugin.id, !plugin.enabled);
+      setPlugins(await api.plugins());
+      await refresh();
+      setPluginMessage(`${plugin.name} 已${plugin.enabled ? "停用" : "启用"}。`);
+    } catch (err) {
+      setPluginMessage(err instanceof Error ? err.message : "插件状态更新失败");
+    }
+  }
+
+  async function removePlugin(plugin: PluginInfo) {
+    try {
+      await api.deletePlugin(plugin.id);
+      setPlugins(await api.plugins());
+      await refresh();
+      setPluginMessage(`${plugin.name} 已删除。`);
+    } catch (err) {
+      setPluginMessage(err instanceof Error ? err.message : "插件删除失败");
     }
   }
 
@@ -204,37 +263,80 @@ export default function Settings() {
           {message && <div className="settings-message"><Check size={15} /> {message}</div>}
         </section>
 
-        <section className="glass settings-panel dataset-panel">
+        <section className="glass settings-panel plugin-panel">
           <div className="panel-head">
             <div>
-              <div className="section-label mono">STYLE DATASET</div>
-              <h2>文本数据集</h2>
+              <div className="section-label mono">EXTERNAL DATASET / PLUGINS</div>
+              <h2>外部数据集与插件包</h2>
             </div>
-            <Database size={20} className="accent" />
+            <Package size={20} className="accent" />
           </div>
-          {dataset ? (
-            <>
-              <div className="dataset-stats">
-                <div><strong>{String(dataset.summary.works || 0)}</strong><span>作品</span></div>
-                <div><strong>{String(dataset.summary.version || "v0.1")}</strong><span>版本</span></div>
-                <div><strong>{String(dataset.summary.status || "ready")}</strong><span>状态</span></div>
-              </div>
-              <div className="dataset-list">
-                {dataset.preview.slice(0, 6).map((work, index) => (
-                  <div key={index} className="dataset-row">
-                    <span className="mono">{String(work.id || index)}</span>
-                    <strong>{String(work.title_zh || work.title || "未命名")}</strong>
-                    <Tag tone="accent">{String((work.genres as string[])?.[0] || "VN")}</Tag>
+          <p className="muted small">
+            核心仓库不内置第三方剧情、图片、音乐或语音。数据集、世界包、故事包、素材包都通过插件安装。
+          </p>
+          <div className="dataset-stats">
+            <div><strong>{data.dataset.active_plugins || 0}</strong><span>启用插件</span></div>
+            <div><strong>{data.dataset.works || 0}</strong><span>作品样本</span></div>
+            <div><strong>EXTERNAL</strong><span>数据模式</span></div>
+          </div>
+          <div className="plugin-actions">
+            <button className="btn btn-primary" onClick={() => fileRef.current?.click()} disabled={installing}>
+              <Upload size={15} /> {installing ? "正在安装..." : "安装插件包 (.zip)"}
+            </button>
+            <input
+              ref={fileRef}
+              type="file"
+              accept=".zip"
+              style={{ display: "none" }}
+              onChange={(event) => {
+                const file = event.target.files?.[0];
+                if (file) void installPlugin(file);
+                event.target.value = "";
+              }}
+            />
+          </div>
+          {pluginMessage && <div className="settings-message"><Check size={15} /> {pluginMessage}</div>}
+          <div className="plugin-list">
+            {plugins.map((plugin) => (
+              <div key={plugin.id} className={`plugin-card ${plugin.enabled ? "enabled" : ""}`}>
+                <div className="plugin-icon"><Package size={18} /></div>
+                <div className="plugin-info">
+                  <div className="plugin-title">
+                    <strong>{plugin.name}</strong>
+                    <Tag tone="accent">{plugin.type}</Tag>
                   </div>
-                ))}
+                  <p>{plugin.description}</p>
+                  <div className="plugin-meta mono">
+                    <span>{plugin.id}</span>
+                    <span>v{plugin.version}</span>
+                    <span>{plugin.source}</span>
+                    {plugin.works > 0 && <span>{plugin.works} works</span>}
+                  </div>
+                  <div className="plugin-license mono">
+                    License: {plugin.license || "not specified"}
+                  </div>
+                </div>
+                <div className="plugin-controls">
+                  <button
+                    className="icon-btn"
+                    onClick={() => void togglePlugin(plugin)}
+                    title={plugin.enabled ? "停用" : "启用"}
+                  >
+                    {plugin.enabled ? <ToggleRight size={21} /> : <ToggleLeft size={21} />}
+                  </button>
+                  {plugin.source === "user" && (
+                    <button className="icon-btn" onClick={() => void removePlugin(plugin)} title="删除">
+                      <Trash2 size={16} />
+                    </button>
+                  )}
+                </div>
               </div>
-              <p className="mono micro muted">
-                数据集只收录剧情摘要、结构分析与来源链接；不直接打包游戏资源。
-              </p>
-            </>
-          ) : (
-            <p className="muted">正在读取数据集...</p>
-          )}
+            ))}
+            {plugins.length === 0 && <p className="muted small">没有发现插件。安装一个 .zip 插件包开始。</p>}
+          </div>
+          <p className="mono micro muted">
+            插件目录：%APPDATA%/yumeVNGame/plugins · 核心不内置第三方数据
+          </p>
         </section>
       </div>
     </div>

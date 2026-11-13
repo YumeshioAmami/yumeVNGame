@@ -1,6 +1,6 @@
-# yumeVNGame v1.0 MVP Plan
+# yumeVNGame 0.1.0 Prototype Plan
 
-> 目标：在一个晚上交付可运行的 v1.0 垂直版本，第二天可以验收。
+> 目标：在一个晚上交付可运行的 0.1.0 垂直原型，第二天可以验收。1.0.0 等验收通过并且图片 / 音频模型真正接上后再做。
 
 ## 1. 第一版范围
 
@@ -16,7 +16,7 @@
 - 分支进度；
 - CG 回看、场景回看、立绘差分查看；
 - API Key 加密保存在本地用户数据目录；
-- 文本视觉小说数据集（真实作品元数据 + 剧情摘要 + 来源）；
+- 外置数据集插件系统（核心不内置第三方数据）；
 - Git 仓库与 MIT 协议。
 
 ### 暂不完成
@@ -46,7 +46,7 @@
 6. 能输入 API Key 并真实调用 DeepSeek 生成一个新故事；
 7. 新故事能进入播放器并产生分支；
 8. 仓库不含 API Key；
-9. 数据集文件存在且包含来源与许可说明。
+9. 数据集以外部插件形式存在，核心仓库不内置第三方剧情/图片/音频。
 
 ## 4. 文件结构
 
@@ -54,7 +54,8 @@
 server/        FastAPI + SQLite + DeepSeek + secrets
 web/           React UI + VN player + gallery
 scripts/       asset generation / dataset build / smoke test
-datasets/      curated text VN dataset
+plugins/       plugin format + original example dataset plugin
+datasets/      external dataset workspace (local packs gitignored)
 docs/          design docs + this MVP plan
 ```
 

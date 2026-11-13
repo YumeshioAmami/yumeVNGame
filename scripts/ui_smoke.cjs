@@ -63,7 +63,10 @@ async function waitForText(page, selector, text) {
 
   await page.goto(`${base}/#/settings`, { waitUntil: "networkidle" });
   await waitForText(page, ".settings-page h1", "设置");
-  console.log("PASS  settings");
+  await waitForText(page, ".plugin-panel h2", "外部数据集与插件包");
+  const pluginCards = await page.locator(".plugin-card").count();
+  if (pluginCards < 1) throw new Error(`plugin cards too few: ${pluginCards}`);
+  console.log("PASS  settings / plugins");
 
   await browser.close();
   console.log("ALL UI SMOKE TESTS PASSED");

@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import json
+import argparse
 import re
+import shutil
 import time
 from datetime import datetime, timezone
 from pathlib import Path
@@ -11,8 +13,9 @@ import requests
 
 
 ROOT = Path(__file__).resolve().parent.parent
-OUT = ROOT / "datasets" / "text_vn"
+OUT = ROOT / "datasets" / "local" / "text_vn"
 RAW = OUT / "raw"
+LEGACY_RAW = ROOT / "datasets" / "text_vn" / "raw"
 API = "https://zh.wikipedia.org/w/api.php"
 HEADERS = {"User-Agent": "yumeVNGame-dataset-builder/0.1 (local research)"}
 
@@ -358,16 +361,27 @@ def extract_plot(text: str) -> str:
     return body[:2200]
 
 
-def main() -> None:
+def main(offline: bool = False) -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     RAW.mkdir(parents=True, exist_ok=True)
     records = []
     for index, work in enumerate(WORKS, start=1):
         print(f"[{index}/{len(WORKS)}] {work['title_zh']}")
-        try:
-            text, resolved, status = fetch_extract(work["wiki"])
-        except Exception as exc:
-            text, resolved, status = "", work["wiki"], f"error: {exc}"
+        if offline:
+            legacy = LEGACY_RAW / f"{work['id']}.txt"
+            current = RAW / f"{work['id']}.txt"
+            source_path = current if current.exists() else legacy
+            if source_path.exists():
+                text = source_path.read_text(encoding="utf-8")
+                resolved = work["wiki"]
+                status = "offline_cache"
+            else:
+                text, resolved, status = "", work["wiki"], "offline_missing"
+        else:
+            try:
+                text, resolved, status = fetch_extract(work["wiki"])
+            except Exception as exc:
+                text, resolved, status = "", work["wiki"], f"error: {exc}"
         if text:
             (RAW / f"{work['id']}.txt").write_text(text, encoding="utf-8")
         summary = extract_plot(text) if text else work["fallback_summary"]
@@ -396,7 +410,8 @@ def main() -> None:
             "fetched_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         }
         records.append(record)
-        time.sleep(1.2)
+        if not offline:
+            time.sleep(1.2)
 
     with (OUT / "works.jsonl").open("w", encoding="utf-8") as handle:
         for record in records:
@@ -432,9 +447,39 @@ def main() -> None:
         json.dumps(manifest, ensure_ascii=False, indent=2),
         encoding="utf-8",
     )
+    plugin = {
+        "id": "text-vn-official",
+        "name": "Official Text VN Style Pack",
+        "version": "0.1.0",
+        "type": "dataset",
+        "description": "Optional research pack of visual novel plot summaries and editorial style notes. Built locally, not shipped with the core app.",
+        "author": "yumeVNGame contributors / public encyclopedia sources",
+        "license": "Plot summaries: CC BY-SA with source links; editorial metadata: see NOTICE.md",
+        "enabled_by_default": False,
+        "data_file": "works.jsonl",
+        "context_file": "style_notes.md",
+        "tags": ["dataset", "text", "style", "external"],
+    }
+    (OUT / "plugin.json").write_text(
+        json.dumps(plugin, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
+    style_source = ROOT / "plugins" / "example-dataset" / "style_notes.md"
+    if style_source.exists():
+        shutil.copyfile(style_source, OUT / "style_notes.md")
+    (OUT / "NOTICE.md").write_text(
+        "# Dataset Notice\n\n"
+        "Plot summaries are derived from public encyclopedia sources and keep source URLs in works.jsonl.\n"
+        "Editorial metadata is original to this project. This pack is external and is not part of the core repository.\n"
+        "Do not redistribute game binaries, full commercial scripts, or asset files.\n",
+        encoding="utf-8",
+    )
     print(f"wrote {len(records)} works to {OUT / 'works.jsonl'}")
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--offline", action="store_true", help="use cached raw text instead of fetching Wikipedia")
+    args = parser.parse_args()
+    main(offline=args.offline)
 

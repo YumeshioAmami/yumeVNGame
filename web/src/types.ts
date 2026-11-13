@@ -128,10 +128,26 @@ export interface SecretsStatus {
   storage: string;
 }
 
+export interface PluginInfo {
+  id: string;
+  name: string;
+  version: string;
+  type: "dataset" | "world" | "story" | "music" | "image" | "voice" | "asset_pack" | "theme";
+  description: string;
+  author: string;
+  license: string;
+  tags: string[];
+  source: "bundled" | "user";
+  works: number;
+  enabled: boolean;
+  path?: string;
+}
+
 export interface Bootstrap {
   stories: StoryRecord[];
   settings: Settings;
   secrets: SecretsStatus;
+  plugins: PluginInfo[];
   stats: {
     stories: number;
     saves: number;
@@ -140,6 +156,9 @@ export interface Bootstrap {
   };
   dataset: {
     works?: number;
+    plugins?: number;
+    active_plugins?: number;
+    mode?: string;
     name?: string;
     version?: string;
     status?: string;

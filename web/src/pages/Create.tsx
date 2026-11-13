@@ -181,8 +181,8 @@ export default function Create() {
             <div className="section-label mono">STYLE MEMORY</div>
             <h3>风格参考库</h3>
             <p className="muted small">
-              已收录 {data.dataset.works || 0} 部真实视觉小说作品的剧情摘要、结构与氛围标签，
-              用作文本风格参考，不直接复制原文。
+              已启用 {data.dataset.active_plugins || 0} 个数据集插件，共 {data.dataset.works || 0} 部作品样本。
+              核心不内置第三方剧情、图片或音频，可在设置里安装外部插件包。
             </p>
             <div className="chip-cloud">
               <Tag tone="accent">命运石之门</Tag>
