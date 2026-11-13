@@ -1,45 +1,45 @@
 # yumeVNGame
 
+[English](README.md) | [简体中文](README.zh-CN.md)
+
 [![CI](https://github.com/YumeshioAmami/yumeVNGame/actions/workflows/ci.yml/badge.svg)](https://github.com/YumeshioAmami/yumeVNGame/actions/workflows/ci.yml)
 
-> An open-source, AI-native visual novel runtime. Stories are compiled as complete narrative packages — not improvised chat — then rendered with backgrounds, sprites, CG, branching, saves, and a memory gallery.
+> A local-first, AI-native visual novel **desktop application**. Stories are compiled as complete narrative packages — not improvised chat — then rendered with backgrounds, sprites, CG, branching, saves, and a memory gallery.
 
 Repository: <https://github.com/YumeshioAmami/yumeVNGame>
 
-**Current status: `0.1.0` source prototype.** There is no packaged release yet. `1.0.0` is reserved for after acceptance and after real image / audio backends are connected.
+**Current status: `0.1.0` source prototype.** This is not a packaged release. `1.0.0` is reserved for after user acceptance and after real image / audio backends are connected.
 
 ![Home](docs/screenshots/home.jpg)
 
-## What is this?
+## Desktop application
 
-yumeVNGame is a local-first AI visual novel engine and story compiler.
+yumeVNGame runs as a native desktop window, not as a website.
+
+- **Desktop shell:** Python + PyWebView (WebView2 on Windows)
+- **Local backend:** FastAPI on `127.0.0.1`
+- **Local storage:** SQLite + local asset / plugin directories
+- **Launch:** `start.bat` or `start.ps1`
+- **Development only:** `dev.bat` or `npm run dev` (Vite + API in a browser)
+
+The desktop app starts the local API, builds the frontend bundle if needed, opens the native window, and shuts the local API down when the window closes.
+
+## What it is
 
 - **Not an AI companion chatbot.** The model first designs a complete story graph, then renders scenes.
 - **Visual novel first.** Every scene must have a background or CG. Sprites appear when characters appear; CG scenes never stack sprites.
 - **Branching and memory.** Choices, endings, saves, CG replay, scene replay, and sprite differential viewing are first-class features.
 - **Bring your own model.** DeepSeek-compatible chat completions are supported first; the model layer is intentionally replaceable.
 - **Local secrets.** API keys are encrypted at rest in the user data directory, never committed to the repository.
-
-## Screenshots
-
-| Story library | Story compiler |
-|---|---|
-| ![Library](docs/screenshots/home.jpg) | ![Compiler](docs/screenshots/create.jpg) |
-
-| VN player | Branch choices |
-|---|---|
-| ![Player](docs/screenshots/player.jpg) | ![Choices](docs/screenshots/choices.jpg) |
-
-| Memory gallery | Settings |
-|---|---|
-| ![Gallery](docs/screenshots/gallery.jpg) | ![Settings](docs/screenshots/settings.jpg) |
+- **External content packs.** Datasets, worlds, stories, music, images, voice and asset packs are plugins, not core content.
 
 ## Features
 
 ### Story runtime
 
-- Full-screen visual novel stage with glass dialogue panel;
-- Typewriter dialogue, narration, speaker color, click-to-continue;
+- Native desktop window with local FastAPI backend;
+- Full-screen visual novel stage;
+- Typewriter dialogue, narration, speaker colors;
 - Branch choices with hints;
 - Backgrounds with time-of-day / mood filters;
 - Sprite layers with expression differentials;
@@ -65,18 +65,42 @@ yumeVNGame is a local-first AI visual novel engine and story compiler.
 - Ending collection;
 - Unlock state persisted per local player.
 
-### UI
+### Plugin system
 
-- Modern floating glass UI;
-- Animated aurora / grid / noise background;
-- Four themes: Aurora, Neon, Ember, Mono;
-- Responsive layout;
-- Story cards, creation pipeline, archive, control room.
+```text
+dataset      style / structure / few-shot / RAG data
+world        world canon, rules, locations, factions, lore
+story        complete story packages or story chains
+music        themes, tracks, cues
+image        backgrounds, sprites, CG, UI packs
+voice        voice profiles / reference audio
+asset_pack   bundled mixed assets
+theme        UI theme packs
+```
+
+The first implemented type is `dataset`. Users install `.zip` packs from **Settings → External dataset / plugins**. The core repository ships only an original example dataset plugin, not third-party plot summaries or commercial game content.
+
+See `docs/PLUGIN_SYSTEM.md` and `datasets/README.md`.
+
+## Screenshots
+
+| Story library | Story compiler |
+|---|---|
+| ![Library](docs/screenshots/home.jpg) | ![Compiler](docs/screenshots/create.jpg) |
+
+| VN player | Branch choices |
+|---|---|
+| ![Player](docs/screenshots/player.jpg) | ![Choices](docs/screenshots/choices.jpg) |
+
+| Memory gallery | Settings / plugins |
+|---|---|
+| ![Gallery](docs/screenshots/gallery.jpg) | ![Settings](docs/screenshots/settings.jpg) |
 
 ## Tech stack
 
+- Desktop shell: Python + PyWebView
+- Backend: FastAPI + SQLite
 - Frontend: React 18 + TypeScript + Vite + Framer Motion + Lucide
-- Backend: Python FastAPI + SQLite
 - Model: OpenAI-compatible chat completions (DeepSeek by default)
 - Assets: local procedural SVG concept backgrounds, sprites and CG placeholders
 - Storage: local SQLite + encrypted local secrets
@@ -85,6 +109,7 @@ yumeVNGame is a local-first AI visual novel engine and story compiler.
 
 Requirements:
 
+- Windows 10/11 with WebView2 runtime
 - Node.js 20+
 - Python 3.10+
 
@@ -93,30 +118,31 @@ npm install
 pip install -r requirements.txt
 ```
 
-On Windows, you can also double-click `start.bat` (or run `powershell -ExecutionPolicy Bypass -File start.ps1`). The launcher installs missing dependencies and opens the source dev server.
+Then double-click:
 
-Start the local API and Vite dev server:
-
-```bash
-npm run dev
+```text
+start.bat
 ```
 
-Open `http://localhost:5173`.
+Or run:
 
-Production build:
-
-```bash
-npm run build
-npm start
+```powershell
+powershell -ExecutionPolicy Bypass -File start.ps1
 ```
 
-Then open `http://127.0.0.1:8787`.
+The desktop launcher installs missing dependencies, builds the frontend if needed, starts the local API and opens the native application window.
+
+For development only:
+
+```text
+dev.bat
+```
 
 ## Configure a text model
 
 ### Option A: Settings UI
 
-Open **设置 → 文本模型**, paste your API key, choose model / base URL, then save.
+Open **Settings → Text model**, paste your API key, choose model / base URL, then save.
 
 ### Option B: Environment + encrypted store
 
@@ -132,20 +158,11 @@ The key is saved encrypted at:
 %APPDATA%\yumeVNGame\secrets.enc
 ```
 
-The master key is stored separately at `%APPDATA%\yumeVNGame\master.key`.  
-Neither file is inside the repository.
+The master key is stored separately at `%APPDATA%\yumeVNGame\master.key`. Neither file is inside the repository.
 
-> The model name is configurable. `deepseek-chat` is the default because it produces stable structured JSON faster through the tested OpenAI-compatible endpoint.
-
-## Datasets are external plugins
+## External dataset packs
 
 The core repository intentionally ships **no third-party plot summaries, game scripts, images, music, or voice assets**.
-
-- text datasets are optional plugin packs;
-- the same plugin system is designed for world packs, story packs, music packs, image / sprite packs, voice packs, and asset packs;
-- users install `.zip` plugin packs from **设置 → 外部数据集与插件包**;
-- an official dataset pack can be built locally and distributed separately with its own attribution;
-- the core app stays free of third-party content licensing risk.
 
 Build an external research pack:
 
@@ -161,18 +178,23 @@ datasets/local/text_vn/                 # gitignored local pack
 dist_plugins/text-vn-official-0.1.0.zip # installable plugin pack
 ```
 
-See `datasets/README.md` and `docs/PLUGIN_SYSTEM.md`.
+Install the zip from **Settings → External dataset / plugins**. The pack is stored in:
+
+```text
+%APPDATA%\yumeVNGame\plugins\<plugin-id>\
+```
 
 ## Architecture
 
 ```text
-web/                 React UI, VN player, compiler, gallery, settings
-server/              FastAPI API, SQLite layer, DeepSeek client, encrypted secrets
-scripts/             asset generation, dataset builder, smoke tests, validators
-plugins/             plugin format + original example dataset plugin
-datasets/            external dataset workspace (local packs gitignored)
-docs/                design documents, MVP plan, screenshots
-data/                local runtime database (gitignored)
+desktop.py            native desktop launcher (PyWebView + local API)
+web/                  React UI, VN player, compiler, gallery, settings
+server/               FastAPI API, SQLite layer, DeepSeek client, encrypted secrets, plugins
+scripts/              asset generation, dataset builder, packaging, smoke tests, validators
+plugins/              plugin format + original example dataset plugin
+datasets/             external dataset workspace (local packs gitignored)
+docs/                 design documents, plugin system, prototype notes, screenshots
+data/                 local runtime database (gitignored)
 ```
 
 Key design documents:
@@ -182,43 +204,17 @@ Key design documents:
 - `docs/DATA_MODEL_V0.md`
 - `docs/DATA_AND_QUALITY.md`
 - `docs/MODEL_AND_DEGRADATION.md`
+- `docs/PLUGIN_SYSTEM.md`
 - `docs/MVP_PLAN.md`
-
-## API overview
-
-```text
-GET    /api/health
-GET    /api/bootstrap
-GET    /api/stories
-GET    /api/stories/{id}
-POST   /api/stories/generate
-POST   /api/sessions
-GET    /api/sessions/{id}
-POST   /api/sessions/{id}/next
-POST   /api/sessions/{id}/choose
-POST   /api/sessions/{id}/save
-GET    /api/stories/{id}/saves
-POST   /api/saves/{id}/load
-GET    /api/stories/{id}/gallery
-GET    /api/settings
-PUT    /api/settings
-POST   /api/settings/secret
-DELETE /api/settings/secret
-GET    /api/plugins
-POST   /api/plugins/install
-PUT    /api/plugins/{id}
-DELETE /api/plugins/{id}
-POST   /api/tts
-GET    /api/dataset
-```
+- `docs/PROTOTYPE_NOTES.md`
 
 ## Verification
 
 ```bash
-# Type-check frontend
+# Frontend type-check
 npx tsc --noEmit -p web/tsconfig.json
 
-# Build frontend
+# Frontend build
 npm run build
 
 # Validate all story packages and visual assets
@@ -230,26 +226,30 @@ python scripts/smoke_test.py
 # Include a real model generation test
 python scripts/smoke_test.py --generate
 
-# Local browser UI smoke test (uses installed Edge by default)
+# Local browser UI smoke test (development)
 npm run test:ui
+
+# Native desktop launch test (auto-closes after 4 seconds)
+$env:YUME_AUTO_CLOSE_MS="4000"; python desktop.py
 ```
 
-## Current 0.1.0 prototype boundaries
+## 0.1.0 boundaries and 1.0.0 gate
 
 Working:
 
+- native desktop launcher;
 - text generation through DeepSeek-compatible API;
 - complete story package generation;
 - branching playback;
 - save / load;
 - CG / scene / sprite / ending gallery;
 - local encrypted key storage;
-- external dataset / plugin pack system (original example plugin bundled);
-- local source launcher (`start.bat` / `start.ps1`).
+- external dataset / plugin pack system;
+- source launcher (`start.bat` / `start.ps1`).
 
-Placeholder / next:
+Not yet in 0.1.0:
 
-- packaged installer / standalone build (not released yet);
+- packaged installer / standalone build;
 - real image generation backend;
 - real music generation backend;
 - tested GPT-SoVITS voice backend (adapter exists, browser TTS fallback works);
@@ -257,12 +257,15 @@ Placeholder / next:
 - Ren'Py export;
 - cloud sync and multiplayer.
 
+`1.0.0` is gated on user acceptance, real image / audio backends, and a packaged distribution decision.
+
 ## Security
 
 - No API key is committed to the repository.
 - Secrets are encrypted with Fernet.
 - The local backend binds to `127.0.0.1` by default.
 - Story data and saves stay in local SQLite.
+- Plugin archives are validated and extracted outside the repository.
 - The app does not upload keys to any third-party storage; model calls go directly to the configured endpoint.
 
 ## License

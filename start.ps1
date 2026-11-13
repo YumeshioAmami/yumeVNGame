@@ -24,12 +24,9 @@ if ($LASTEXITCODE -ne 0) {
   pip install -r requirements.txt
 }
 
-Write-Host "[start] launching API + Vite source server..." -ForegroundColor Green
-Write-Host "[start] opening http://localhost:5173" -ForegroundColor Green
-Start-Job -ScriptBlock {
-  Start-Sleep -Seconds 5
-  Start-Process "http://localhost:5173"
-} | Out-Null
-
-npm run dev
+Write-Host "[start] launching yumeVNGame desktop application..." -ForegroundColor Green
+python desktop.py
+if ($LASTEXITCODE -ne 0) {
+  throw "Desktop application exited with code $LASTEXITCODE"
+}
 

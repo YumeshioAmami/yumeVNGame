@@ -6,7 +6,7 @@
 
 ### 必须完成
 
-- 现代化、悬浮化、动态化、科技化的 Web UI；
+- 现代化、悬浮化、动态化、科技化的桌面应用 UI；
 - 多主题色切换；
 - 故事库、创建故事、游玩、画廊、设置；
 - DeepSeek 文本模型接入；
@@ -32,6 +32,7 @@
 
 - 前端：React + TypeScript + Vite + Framer Motion + Lucide
 - 后端：Python FastAPI + SQLite
+- 桌面外壳：Python + PyWebView
 - 模型：DeepSeek OpenAI-compatible API
 - 素材：本地 SVG 概念背景 / 立绘占位，后续可替换为生成资产
 - 存储：本地 SQLite + 用户数据目录加密密钥
