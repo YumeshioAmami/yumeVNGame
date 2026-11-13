@@ -214,6 +214,7 @@ Key design documents:
 - `docs/CHARACTER_CONSISTENCY.md`
 - `docs/CHARACTER_PIPELINE.md`
 - `docs/API_KEYS.md`
+- `docs/REFERENCE_DATASET.md`
 - `docs/MVP_PLAN.md`
 - `docs/PROTOTYPE_NOTES.md`
 
