@@ -213,7 +213,7 @@ export default function Settings() {
           </div>
 
           <label className="field">
-            <span>DeepSeek API Key</span>
+            <span>文本模型 API Key</span>
             <input
               type="password"
               value={keyInput}
@@ -232,6 +232,9 @@ export default function Settings() {
               <input value={baseUrl} onChange={(event) => setBaseUrl(event.target.value)} />
             </label>
           </div>
+          <p className="mono micro muted">
+            硅基流动：https://api.siliconflow.cn/v1 · DeepSeek：https://api.deepseek.com
+          </p>
           <div className="button-row">
             <button className="btn btn-primary" onClick={() => void saveKey()} disabled={busy}>
               <Save size={15} /> 加密保存 Key
