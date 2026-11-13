@@ -211,6 +211,7 @@ Key design documents:
 - `docs/MODEL_AND_DEGRADATION.md`
 - `docs/PLUGIN_SYSTEM.md`
 - `docs/MODEL_RECOMMENDATIONS.md`
+- `docs/IMAGE_AGENT_DESIGN.md`
 - `docs/CHARACTER_CONSISTENCY.md`
 - `docs/CHARACTER_PIPELINE.md`
 - `docs/API_KEYS.md`
