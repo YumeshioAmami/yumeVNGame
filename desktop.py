@@ -114,26 +114,6 @@ def wait_for_server(url: str, timeout: float = 20.0) -> None:
     raise RuntimeError("local API did not start")
 
 
-class DesktopApi:
-    def __init__(self) -> None:
-        self.window = None
-
-    def select_file(self, directory: bool = False) -> str:
-        import webview
-
-        if self.window is None:
-            return ""
-        dialog_type = (
-            webview.FileDialog.FOLDER if directory else webview.FileDialog.OPEN
-        )
-        result = self.window.create_file_dialog(dialog_type, allow_multiple=False)
-        if not result:
-            return ""
-        if isinstance(result, (list, tuple)):
-            return str(result[0]) if result else ""
-        return str(result)
-
-
 def main() -> None:
     lock = SingleInstanceLock(LOCK_PATH)
     if not lock.acquire():
@@ -162,7 +142,6 @@ def main() -> None:
         wait_for_server(f"{base_url}/api/health")
         print(f"[desktop] yumeVNGame 0.1.0 -> {base_url}")
 
-        api = DesktopApi()
         window = webview.create_window(
             WINDOW_TITLE,
             base_url,
@@ -171,9 +150,7 @@ def main() -> None:
             min_size=(1100, 700),
             background_color="#05070d",
             confirm_close=False,
-            js_api=api,
         )
-        api.window = window
         auto_close_ms = os.getenv("YUME_AUTO_CLOSE_MS", "").strip()
         if auto_close_ms.isdigit():
             threading.Timer(int(auto_close_ms) / 1000, window.destroy).start()

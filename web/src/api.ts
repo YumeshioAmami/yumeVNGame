@@ -88,6 +88,11 @@ export const api = {
       `/agent-configs/${encodeURIComponent(agent_id)}/key`,
       { method: "DELETE" },
     ),
+  pickAgentFile: (directory: boolean) =>
+    request<{ path: string }>("/agent-configs/pick-file", {
+      method: "POST",
+      body: JSON.stringify({ directory }),
+    }),
   setSecret: (api_key: string, model?: string, base_url?: string) =>
     request<{ settings: import("./types").Settings; secrets: import("./types").SecretsStatus }>(
       "/settings/secret",

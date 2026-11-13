@@ -201,13 +201,3 @@ export interface Bootstrap {
   };
 }
 
-declare global {
-  interface Window {
-    pywebview?: {
-      api?: {
-        select_file?: (directory?: boolean) => Promise<string>;
-      };
-    };
-  }
-}
-

@@ -11,7 +11,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
-from . import db, llm, plugins, secrets
+from . import db, file_picker, llm, plugins, secrets
 
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -70,6 +70,10 @@ class AgentConfigUpdate(BaseModel):
     local_path: str | None = None
     local_endpoint: str | None = None
     api_key: str | None = None
+
+
+class FilePickerRequest(BaseModel):
+    directory: bool = False
 
 
 class SecretRequest(BaseModel):
@@ -277,6 +281,15 @@ def clear_agent_config_key(agent_id: str) -> dict[str, Any]:
     except KeyError as exc:
         raise HTTPException(404, f"unknown agent: {agent_id}") from exc
     return {"agent": agent}
+
+
+@app.post("/api/agent-configs/pick-file")
+def pick_agent_file(payload: FilePickerRequest) -> dict[str, str]:
+    try:
+        path = file_picker.select_path(payload.directory)
+    except Exception as exc:
+        raise HTTPException(500, f"file picker failed: {exc}") from exc
+    return {"path": path}
 
 
 @app.get("/api/tts/status")

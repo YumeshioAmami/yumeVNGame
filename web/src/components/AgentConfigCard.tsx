@@ -61,13 +61,9 @@ export default function AgentConfigCard({ config, onSaved }: Props) {
   }
 
   async function pick(directory: boolean) {
-    if (!window.pywebview?.api?.select_file) {
-      setMessage("当前环境不支持原生文件选择，请直接填写路径。");
-      return;
-    }
     try {
-      const path = await window.pywebview.api.select_file(directory);
-      if (path) setLocalPath(path);
+      const result = await api.pickAgentFile(directory);
+      if (result.path) setLocalPath(result.path);
     } catch (err) {
       setMessage(err instanceof Error ? err.message : "选择文件失败");
     }
