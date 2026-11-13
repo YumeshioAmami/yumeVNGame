@@ -76,6 +76,34 @@ def main() -> None:
     dataset = requests.get(f"{BASE}/dataset", timeout=20).json()
     check("dataset detail", len(dataset.get("preview", [])) >= 1, str(dataset.get("summary"))[:200])
 
+    agents = requests.get(f"{BASE}/agent-configs", timeout=20).json().get("agents", [])
+    check("agent configs", len(agents) >= 18, f"agents={len(agents)}")
+    check(
+        "agent categories",
+        {"image", "text", "music"}.issubset({agent.get("category") for agent in agents}),
+        str(sorted({agent.get("category") for agent in agents})),
+    )
+    text_agent = next((agent for agent in agents if agent.get("id") == "text_intake"), None)
+    check("agent config detail", bool(text_agent), str(text_agent)[:200])
+    if text_agent:
+        original = {
+            key: text_agent.get(key, "")
+            for key in ("mode", "model", "base_url", "local_path", "local_endpoint")
+        }
+        probe = {**original, "model": text_agent.get("model", "") + "-smoke"}
+        updated = requests.put(
+            f"{BASE}/agent-configs/text_intake",
+            json=probe,
+            timeout=20,
+        )
+        check("agent config update", updated.status_code == 200 and updated.json()["agent"]["model"].endswith("-smoke"), updated.text[:300])
+        restored = requests.put(
+            f"{BASE}/agent-configs/text_intake",
+            json=original,
+            timeout=20,
+        )
+        check("agent config restore", restored.status_code == 200 and restored.json()["agent"]["model"] == text_agent.get("model"), restored.text[:300])
+
     # External plugin install / toggle / delete.
     buffer = io.BytesIO()
     with zipfile.ZipFile(buffer, "w") as archive:

@@ -130,6 +130,25 @@ export interface Settings {
   image_agent_character_diff: string;
 }
 
+export type AgentCategory = "image" | "text" | "music";
+export type AgentMode = "api" | "local";
+
+export interface AgentConfig {
+  id: string;
+  category: AgentCategory;
+  label: string;
+  sort_order: number;
+  mode: AgentMode;
+  model: string;
+  base_url: string;
+  local_path: string;
+  local_endpoint: string;
+  provider: string;
+  updated_at: string;
+  has_key: boolean;
+  masked_key: string;
+}
+
 export interface ProviderKeyStatus {
   id: string;
   name: string;
@@ -180,5 +199,15 @@ export interface Bootstrap {
     version?: string;
     status?: string;
   };
+}
+
+declare global {
+  interface Window {
+    pywebview?: {
+      api?: {
+        select_file?: (directory?: boolean) => Promise<string>;
+      };
+    };
+  }
 }
 

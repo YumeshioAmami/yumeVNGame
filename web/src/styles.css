@@ -2944,9 +2944,101 @@ body {
   border-top: 1px solid var(--line);
 }
 
+.agent-section {
+  grid-column: 1 / -1;
+}
+
+.agent-config-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.agent-config-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.32);
+}
+
+.agent-config-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.agent-config-head h3 {
+  margin: 4px 0 0;
+  font-size: 16px;
+  line-height: 1.3;
+}
+
+.agent-mode-pill {
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.agent-mode-pill.api {
+  color: var(--accent);
+  background: var(--accent-soft);
+  border: 1px solid color-mix(in srgb, var(--accent) 25%, var(--line));
+}
+
+.agent-mode-pill.local {
+  color: var(--success);
+  background: color-mix(in srgb, var(--success) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--success) 25%, var(--line));
+}
+
+.agent-mode-switch {
+  display: inline-flex;
+  width: fit-content;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(120, 100, 140, 0.06);
+}
+
+.agent-mode-switch button {
+  border: 0;
+  border-radius: 999px;
+  padding: 6px 12px;
+  color: var(--muted);
+  background: transparent;
+  font-size: 10px;
+  cursor: pointer;
+}
+
+.agent-mode-switch button.active {
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.agent-config-card .field {
+  margin: 0;
+}
+
+.agent-config-card .button-row {
+  flex-wrap: wrap;
+}
+
 @media (max-width: 920px) {
   .provider-grid,
   .provider-defaults {
+    grid-template-columns: 1fr;
+  }
+
+  .agent-config-grid {
     grid-template-columns: 1fr;
   }
 }

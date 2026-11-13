@@ -191,12 +191,25 @@ def generate_story(
     length: str = "短篇",
     extra: str = "",
 ) -> dict[str, Any]:
-    key = secrets.deepseek_key()
+    agent = db.get_agent_config("text_showrunner")
+    if agent:
+        key = db.get_agent_key("text_showrunner") or secrets.deepseek_key()
+        settings = db.get_settings()
+        model = agent.get("model") or settings.get("model") or "deepseek-chat"
+        base_url = (
+            agent.get("local_endpoint")
+            if agent.get("mode") == "local"
+            else agent.get("base_url")
+        ) or settings.get("base_url") or "https://api.deepseek.com"
+    else:
+        key = secrets.deepseek_key()
+        settings = db.get_settings()
+        base_url = settings.get("base_url") or "https://api.deepseek.com"
+        model = settings.get("model") or "deepseek-chat"
+    if not key and agent and agent.get("mode") == "local":
+        key = "local"
     if not key:
-        raise LLMError("DeepSeek API Key 尚未配置。请先在设置中保存 API Key。")
-    settings = db.get_settings()
-    base_url = settings.get("base_url") or "https://api.deepseek.com"
-    model = settings.get("model") or "deepseek-chat"
+        raise LLMError("文本模型 API Key 尚未配置。请先在设置中保存 API Key。")
     style = _style_context()
     user_prompt = f"""
 请生成一部{length}视觉小说。

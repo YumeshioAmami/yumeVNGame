@@ -63,6 +63,15 @@ class SettingsUpdate(BaseModel):
     image_agent_character_diff: str | None = None
 
 
+class AgentConfigUpdate(BaseModel):
+    mode: str | None = None
+    model: str | None = None
+    base_url: str | None = None
+    local_path: str | None = None
+    local_endpoint: str | None = None
+    api_key: str | None = None
+
+
 class SecretRequest(BaseModel):
     api_key: str = Field(min_length=8, max_length=512)
     model: str | None = None
@@ -242,6 +251,32 @@ def delete_provider_key(provider: str) -> dict[str, Any]:
     except ValueError as exc:
         raise HTTPException(404, str(exc)) from exc
     return {"settings": db.get_settings(), "secrets": secrets.public_status()}
+
+
+@app.get("/api/agent-configs")
+def agent_configs() -> dict[str, Any]:
+    return {"agents": db.list_agent_configs()}
+
+
+@app.put("/api/agent-configs/{agent_id}")
+def update_agent_config(agent_id: str, payload: AgentConfigUpdate) -> dict[str, Any]:
+    values = {key: value for key, value in payload.model_dump().items() if value is not None}
+    try:
+        agent = db.update_agent_config(agent_id, values)
+    except KeyError as exc:
+        raise HTTPException(404, f"unknown agent: {agent_id}") from exc
+    except ValueError as exc:
+        raise HTTPException(400, str(exc)) from exc
+    return {"agent": agent}
+
+
+@app.delete("/api/agent-configs/{agent_id}/key")
+def clear_agent_config_key(agent_id: str) -> dict[str, Any]:
+    try:
+        agent = db.clear_agent_key(agent_id)
+    except KeyError as exc:
+        raise HTTPException(404, f"unknown agent: {agent_id}") from exc
+    return {"agent": agent}
 
 
 @app.get("/api/tts/status")

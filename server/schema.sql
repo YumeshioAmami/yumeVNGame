@@ -100,3 +100,17 @@ CREATE TABLE IF NOT EXISTS assets (
   created_at TEXT NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS agent_configs (
+  id TEXT PRIMARY KEY,
+  category TEXT NOT NULL,
+  label TEXT NOT NULL,
+  sort_order INTEGER NOT NULL DEFAULT 0,
+  mode TEXT NOT NULL DEFAULT 'api',
+  model TEXT NOT NULL DEFAULT '',
+  base_url TEXT NOT NULL DEFAULT '',
+  local_path TEXT NOT NULL DEFAULT '',
+  local_endpoint TEXT NOT NULL DEFAULT '',
+  provider TEXT NOT NULL DEFAULT '',
+  updated_at TEXT NOT NULL
+);
+

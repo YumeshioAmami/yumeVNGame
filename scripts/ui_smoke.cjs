@@ -70,11 +70,14 @@ async function waitForText(page, selector, text) {
   await page.goto(`${base}/#/settings`, { waitUntil: "networkidle" });
   await waitForText(page, ".settings-page h1", "设置");
   await waitForText(page, ".plugin-link-panel h2", "插件与数据集");
-  await waitForText(page, ".provider-panel h2", "图片与音乐 API Keys");
-  const providerRows = await page.locator(".provider-row").count();
-  if (providerRows < 4) throw new Error(`provider rows too few: ${providerRows}`);
-  await waitForText(page, ".image-agent-panel h2", "图像 Agent");
-  console.log("PASS  settings / provider keys");
+  await page.waitForSelector(".agent-config-card", { timeout: 15000 });
+  const agentCards = await page.locator(".agent-config-card").count();
+  if (agentCards < 10) throw new Error(`agent config cards too few: ${agentCards}`);
+  const settingsText = await page.locator(".settings-page").innerText();
+  for (const label of ["图像 Agent", "文本 Agent", "音乐 Agent"]) {
+    if (!settingsText.includes(label)) throw new Error(`missing settings section: ${label}`);
+  }
+  console.log("PASS  settings / agent configs");
 
   await browser.close();
   console.log("ALL UI SMOKE TESTS PASSED");

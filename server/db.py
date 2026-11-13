@@ -17,6 +17,35 @@ DATA_DIR = Path(os.getenv("YUME_DATA_DIR", ROOT / "data"))
 DB_PATH = DATA_DIR / "yumevn.db"
 PLAYER_ID = "local-player"
 
+AGENT_CONFIG_DEFAULTS: list[dict[str, Any]] = [
+    # image
+    {"id": "image_distant", "category": "image", "label": "远景", "sort_order": 10, "mode": "api", "model": "pixelwave", "base_url": "https://api.nano-gpt.com/api/v1", "provider": "nanogpt"},
+    {"id": "image_scene", "category": "image", "label": "具体场景", "sort_order": 20, "mode": "api", "model": "prunaai:1@1", "base_url": "https://api.nano-gpt.com/api/v1", "provider": "nanogpt"},
+    {"id": "image_special_cg", "category": "image", "label": "特殊CG", "sort_order": 30, "mode": "api", "model": "seedream-v4.5", "base_url": "https://api.nano-gpt.com/api/v1", "provider": "nanogpt"},
+    {"id": "image_draft", "category": "image", "label": "草稿 / 构图", "sort_order": 40, "mode": "api", "model": "blackforestlabs/flux-3/klein/edit-image", "base_url": "https://api.nano-gpt.com/api/v1", "provider": "nanogpt"},
+    {"id": "image_character_final", "category": "image", "label": "角色最终图 / 设定图", "sort_order": 50, "mode": "api", "model": "bytedance/seedream-v5.0-flash", "base_url": "https://api.nano-gpt.com/api/v1", "provider": "nanogpt"},
+    {"id": "image_character_diff", "category": "image", "label": "日常角色差分", "sort_order": 60, "mode": "api", "model": "blackforestlabs/flux-3/klein/edit-image", "base_url": "https://api.nano-gpt.com/api/v1", "provider": "nanogpt"},
+    # text
+    {"id": "text_intake", "category": "text", "label": "前台 / Intake", "sort_order": 10, "mode": "api", "model": "deepseek-ai/DeepSeek-V4.1-Flash", "base_url": "https://api.siliconflow.cn/v1", "provider": "deepseek"},
+    {"id": "text_showrunner", "category": "text", "label": "Showrunner / 规划", "sort_order": 20, "mode": "api", "model": "deepseek-ai/DeepSeek-V4-Pro", "base_url": "https://api.siliconflow.cn/v1", "provider": "deepseek"},
+    {"id": "text_scene_planner", "category": "text", "label": "场景规划", "sort_order": 25, "mode": "api", "model": "deepseek-ai/DeepSeek-V4-Pro", "base_url": "https://api.siliconflow.cn/v1", "provider": "deepseek"},
+    {"id": "text_writer_daily", "category": "text", "label": "日常正文", "sort_order": 30, "mode": "api", "model": "Qwen/Qwen3.5-122B-A10B", "base_url": "https://api.siliconflow.cn/v1", "provider": "deepseek"},
+    {"id": "text_writer_key", "category": "text", "label": "关键正文", "sort_order": 40, "mode": "api", "model": "Pro/moonshotai/Kimi-K2.6", "base_url": "https://api.siliconflow.cn/v1", "provider": "deepseek"},
+    {"id": "text_critic", "category": "text", "label": "Critic / 审稿", "sort_order": 50, "mode": "api", "model": "deepseek-ai/DeepSeek-V4-Pro", "base_url": "https://api.siliconflow.cn/v1", "provider": "deepseek"},
+    {"id": "text_reviser", "category": "text", "label": "修订 / Reviser", "sort_order": 55, "mode": "api", "model": "Pro/moonshotai/Kimi-K2.6", "base_url": "https://api.siliconflow.cn/v1", "provider": "deepseek"},
+    {"id": "text_state_compiler", "category": "text", "label": "State Compiler / JSON", "sort_order": 60, "mode": "api", "model": "deepseek-ai/DeepSeek-V4.1-Flash", "base_url": "https://api.siliconflow.cn/v1", "provider": "deepseek"},
+    {"id": "text_special_story", "category": "text", "label": "特殊剧情", "sort_order": 70, "mode": "api", "model": "deepseek/deepseek-v4.1-flash-uncensored", "base_url": "https://api.nano-gpt.com/api/v1", "provider": "nanogpt"},
+    {"id": "text_embedding", "category": "text", "label": "Embedding / 检索", "sort_order": 80, "mode": "local", "model": "BAAI/bge-m3", "base_url": "https://api.siliconflow.cn/v1", "local_endpoint": "http://127.0.0.1:11434/v1", "provider": "deepseek"},
+    # music
+    {"id": "music_director", "category": "music", "label": "Music Director", "sort_order": 10, "mode": "api", "model": "deepseek-ai/DeepSeek-V4-Pro", "base_url": "https://api.siliconflow.cn/v1", "provider": "deepseek"},
+    {"id": "music_motif", "category": "music", "label": "Motif Composer", "sort_order": 20, "mode": "api", "model": "deepseek-ai/DeepSeek-V4-Pro", "base_url": "https://api.siliconflow.cn/v1", "provider": "deepseek"},
+    {"id": "music_arranger", "category": "music", "label": "Arranger / 编曲", "sort_order": 25, "mode": "api", "model": "deepseek-ai/DeepSeek-V4-Pro", "base_url": "https://api.siliconflow.cn/v1", "provider": "deepseek"},
+    {"id": "music_bgm_renderer", "category": "music", "label": "BGM Renderer", "sort_order": 30, "mode": "api", "model": "fal-ai/ace-step", "base_url": "https://fal.run", "provider": "fal"},
+    {"id": "music_ambience_renderer", "category": "music", "label": "Ambience Renderer", "sort_order": 40, "mode": "api", "model": "stable-audio-2.5", "base_url": "https://api.stability.ai", "provider": "stability"},
+    {"id": "music_critic", "category": "music", "label": "Music Critic", "sort_order": 50, "mode": "api", "model": "deepseek-ai/DeepSeek-V4-Pro", "base_url": "https://api.siliconflow.cn/v1", "provider": "deepseek"},
+    {"id": "music_post", "category": "music", "label": "Post / 母带", "sort_order": 60, "mode": "local", "model": "Demucs + Matchering", "base_url": "", "local_endpoint": "", "provider": ""},
+]
+
 
 def now() -> str:
     return datetime.now(timezone.utc).isoformat(timespec="milliseconds")
@@ -43,6 +72,37 @@ def _json(value: str | None, fallback: Any) -> Any:
         return fallback
 
 
+def _seed_agent_configs(conn: sqlite3.Connection) -> None:
+    from . import secrets
+
+    for item in AGENT_CONFIG_DEFAULTS:
+        cursor = conn.execute(
+            """
+            INSERT OR IGNORE INTO agent_configs
+              (id, category, label, sort_order, mode, model, base_url, local_path, local_endpoint, provider, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, '', ?, ?, ?)
+            """,
+            (
+                item["id"],
+                item["category"],
+                item["label"],
+                item["sort_order"],
+                item["mode"],
+                item["model"],
+                item.get("base_url", ""),
+                item.get("local_endpoint", ""),
+                item.get("provider", ""),
+                now(),
+            ),
+        )
+        if cursor.rowcount <= 0:
+            continue
+        provider = item.get("provider", "")
+        provider_key = secrets.provider_key(provider) if provider else None
+        if provider_key and item["mode"] == "api":
+            secrets.set_secret(f"agent_{item['id']}_key", provider_key)
+
+
 def init_db() -> None:
     schema = (Path(__file__).with_name("schema.sql")).read_text(encoding="utf-8")
     with _connect() as conn:
@@ -55,6 +115,7 @@ def init_db() -> None:
             "INSERT OR IGNORE INTO schema_meta(version, applied_at) VALUES (1, ?)",
             (now(),),
         )
+        _seed_agent_configs(conn)
         count = conn.execute("SELECT COUNT(*) AS n FROM stories").fetchone()["n"]
         if count == 0:
             _save_story(conn, DEMO_STORY, source="demo", story_id="demo-mistharbor")
@@ -537,6 +598,98 @@ def set_settings(values: dict[str, Any]) -> dict[str, Any]:
                     (key, str(value)),
                 )
     return get_settings()
+
+
+def _public_agent_config(row: sqlite3.Row | None) -> dict[str, Any] | None:
+    from . import secrets
+
+    if not row:
+        return None
+    config = dict(row)
+    key = secrets.get_secret(f"agent_{config['id']}_key")
+    config["has_key"] = bool(key)
+    config["masked_key"] = secrets.mask(key)
+    return config
+
+
+def list_agent_configs() -> list[dict[str, Any]]:
+    with _connect() as conn:
+        rows = conn.execute(
+            """
+            SELECT id, category, label, sort_order, mode, model, base_url, local_path, local_endpoint, provider, updated_at
+            FROM agent_configs
+            ORDER BY category, sort_order, id
+            """
+        ).fetchall()
+    return [_public_agent_config(row) for row in rows if row]
+
+
+def get_agent_config(agent_id: str) -> dict[str, Any] | None:
+    with _connect() as conn:
+        row = conn.execute(
+            """
+            SELECT id, category, label, sort_order, mode, model, base_url, local_path, local_endpoint, provider, updated_at
+            FROM agent_configs WHERE id = ?
+            """,
+            (agent_id,),
+        ).fetchone()
+    return _public_agent_config(row)
+
+
+def get_agent_key(agent_id: str) -> str | None:
+    from . import secrets
+
+    return secrets.get_secret(f"agent_{agent_id}_key")
+
+
+def update_agent_config(agent_id: str, values: dict[str, Any]) -> dict[str, Any]:
+    from . import secrets
+
+    allowed = {"mode", "model", "base_url", "local_path", "local_endpoint"}
+    updates = {key: value for key, value in values.items() if key in allowed}
+    if "mode" in updates and updates["mode"] not in {"api", "local"}:
+        raise ValueError("mode must be 'api' or 'local'")
+    if not updates and "api_key" not in values:
+        raise ValueError("nothing to update")
+    with _connect() as conn:
+        exists = conn.execute("SELECT 1 FROM agent_configs WHERE id = ?", (agent_id,)).fetchone()
+        if not exists:
+            raise KeyError(agent_id)
+        if updates:
+            assignments = ", ".join(f"{key} = ?" for key in updates)
+            conn.execute(
+                f"UPDATE agent_configs SET {assignments}, updated_at = ? WHERE id = ?",
+                (*updates.values(), now(), agent_id),
+            )
+        else:
+            conn.execute(
+                "UPDATE agent_configs SET updated_at = ? WHERE id = ?",
+                (now(), agent_id),
+            )
+    if "api_key" in values:
+        api_key = str(values.get("api_key") or "").strip()
+        if api_key:
+            secrets.set_secret(f"agent_{agent_id}_key", api_key)
+        else:
+            secrets.delete_secret(f"agent_{agent_id}_key")
+    config = get_agent_config(agent_id)
+    if not config:
+        raise KeyError(agent_id)
+    return config
+
+
+def clear_agent_key(agent_id: str) -> dict[str, Any]:
+    from . import secrets
+
+    with _connect() as conn:
+        exists = conn.execute("SELECT 1 FROM agent_configs WHERE id = ?", (agent_id,)).fetchone()
+    if not exists:
+        raise KeyError(agent_id)
+    secrets.delete_secret(f"agent_{agent_id}_key")
+    config = get_agent_config(agent_id)
+    if not config:
+        raise KeyError(agent_id)
+    return config
 
 
 def get_setting(key: str, default: str | None = None) -> str | None:

@@ -66,6 +66,28 @@ export const api = {
       "/settings",
       { method: "PUT", body: JSON.stringify(payload) },
     ),
+  agentConfigs: () =>
+    request<{ agents: import("./types").AgentConfig[] }>("/agent-configs"),
+  updateAgentConfig: (
+    agent_id: string,
+    payload: {
+      mode?: import("./types").AgentMode;
+      model?: string;
+      base_url?: string;
+      local_path?: string;
+      local_endpoint?: string;
+      api_key?: string;
+    },
+  ) =>
+    request<{ agent: import("./types").AgentConfig }>(
+      `/agent-configs/${encodeURIComponent(agent_id)}`,
+      { method: "PUT", body: JSON.stringify(payload) },
+    ),
+  clearAgentKey: (agent_id: string) =>
+    request<{ agent: import("./types").AgentConfig }>(
+      `/agent-configs/${encodeURIComponent(agent_id)}/key`,
+      { method: "DELETE" },
+    ),
   setSecret: (api_key: string, model?: string, base_url?: string) =>
     request<{ settings: import("./types").Settings; secrets: import("./types").SecretsStatus }>(
       "/settings/secret",
